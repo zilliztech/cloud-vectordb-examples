@@ -12,16 +12,12 @@
     cd cloud-vectordb-examples
     cd milvus-java
 
+### Modify endpoint and user password in configuration file,resources/RunSettings.properties
+    milvusHost = in01-244118d082079b6.ap-southeast-1-aws.vdc-test.zilliz.com
+    password = 1qaz@WSX
+
 ### Compile project
     mvn compile
-
-### Modify endpoint and user password in the ConnectParam
-     ConnectParam.newBuilder()
-                        .withHost("in01-XXXXXXXXXXXXX.ap-southeast-1-aws.vdc-test.zilliz.com")
-                        .withPort(19530)
-                        .withAuthorization("root","******")
-                        .withSecure(true)
-                        .build());
 
 ### Run HelloMilvus.java
     mvn exec:java  -Dexec.mainClass="demo.HelloMilvus"

@@ -14,7 +14,7 @@ import io.milvus.response.DescCollResponseWrapper;
 import io.milvus.response.GetCollStatResponseWrapper;
 import io.milvus.response.QueryResultsWrapper;
 import io.milvus.response.SearchResultsWrapper;
-
+import util.PropertyFilesUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,9 +29,9 @@ public class HelloMilvus {
          * */
         final MilvusServiceClient milvusClient = new MilvusServiceClient(
                 ConnectParam.newBuilder()
-                        .withHost("in01-244118d082079b6.ap-southeast-1-aws.vdc-test.zilliz.com")
+                        .withHost(PropertyFilesUtil.getRunValue("milvusHost"))
                         .withPort(19530)
-                        .withAuthorization("root","1qaz@WSX")
+                        .withAuthorization("root",PropertyFilesUtil.getRunValue("password"))
                         .withSecure(true)
                         .build());
        /**
