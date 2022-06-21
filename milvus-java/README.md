@@ -13,8 +13,8 @@
     cd milvus-java
 
 ### Modify endpoint and user password in configuration file,resources/RunSettings.properties
-    milvusHost = in01-244118d082079b6.ap-southeast-1-aws.vdc-test.zilliz.com
-    password = 1qaz@WSX
+    endpoint = in01-XXXXXXXXXXXX.ap-southeast-1-aws.vdc-test.zilliz.com
+    password = ******
 
 ### Compile project
     mvn compile

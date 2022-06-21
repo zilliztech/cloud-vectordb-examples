@@ -1,4 +1,7 @@
+import configparser
+import os
 import random
+from configparser import ConfigParser
 from pymilvus import (
     connections,
     utility,
@@ -9,17 +12,24 @@ from pymilvus import (
 )
 
 
+
+
 if __name__ == '__main__':
+
+    cfp = configparser.ConfigParser()
+    cfp.read('config.ini')
+    milvus_host = cfp.get('example', 'endpoint')
+    password = cfp.get('example', 'password')
 
     """
     step: connect milvus
     parameters: host, port, user, password, secure=true
     """
     connections.connect("default",
-                        host="in01-244118d082079b6.ap-southeast-1-aws.vdc-test.zilliz.com",
+                        host=milvus_host,
                         port=19530,
                         user="root",
-                        password="1qaz@WSX",
+                        password=password,
                         secure=True)
 
     """
