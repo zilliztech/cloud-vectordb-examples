@@ -2,7 +2,6 @@
 
 ### Prerequisites
     Install Python 3.7+
-    Linux 3.8+
     pip
 
 
