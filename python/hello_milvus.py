@@ -16,7 +16,7 @@ if __name__ == '__main__':
     parameters: host, port, user, password, secure=true
     """
     connections.connect("default",
-                        host="in01-b570da60e29bbd5.aws-ap-southeast-1.vectordb-sit.zillizcloud.com",
+                        host="in01-244118d082079b6.ap-southeast-1-aws.vdc-test.zilliz.com",
                         port=19530,
                         user="root",
                         password="1qaz@WSX",

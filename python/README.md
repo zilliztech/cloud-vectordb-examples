@@ -1,16 +1,35 @@
 ## Getting started
 
 ### Prerequisites
+    Install Python 3.7+
+    Linux 3.8+
+    pip
 
-    -   python 3.8 or higher
-    -   pip
 
+### Git clone the example code repo
+    git clone https://github.com/zilliztech/cloud-vectordb-examples.git
 
-### Install PyMilvus
+### Install pymilvus
     pip install pymilvus==2.0.2
 
-### Create Project
+### Go to python folder
+    cd cloud-vectordb-examples
+    cd python
 
-- Copy HelloMilvus.java into your project.
-- Login Vector Database Cloud and ensure your instance is running
-- Copy your instance's host and Authorization, replace connect params
+### Modify endpoint and user password in connect params
+    endpoint = https://in01-xxxxxxxxxxxxx.aws-ap-southeast-1.vectordb-sit.zillizcloud.com
+    user = root 
+    password = ******
+
+### Run hello_milvus.py to run
+    Python hello_milvus.py
+
+### It should print information on the console
+    Collection info: schema, descrption... 
+    partition info: name, description...
+    insert count:  2000
+    create index: code=0
+    search result: ["['(distance: 0.0009647159022279084, id: 47)', '(distance: 0.0012260561343282461, id: 762)']"]
+    query count:  4
+    ...
+    

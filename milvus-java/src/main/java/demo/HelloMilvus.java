@@ -1,4 +1,4 @@
-package com.zilliz.milvustest.businessflow;
+package demo;
 
 import io.milvus.client.MilvusServiceClient;
 import io.milvus.grpc.*;
@@ -29,7 +29,7 @@ public class HelloMilvus {
          * */
         final MilvusServiceClient milvusClient = new MilvusServiceClient(
                 ConnectParam.newBuilder()
-                        .withHost("in01-b570da60e29bbd5.aws-ap-southeast-1.vectordb-sit.zillizcloud.com")
+                        .withHost("in01-244118d082079b6.ap-southeast-1-aws.vdc-test.zilliz.com")
                         .withPort(19530)
                         .withAuthorization("root","1qaz@WSX")
                         .withSecure(true)
