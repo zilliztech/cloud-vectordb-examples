@@ -12,8 +12,9 @@
     cd cloud-vectordb-examples
     cd milvus-java
 
-### Modify endpoint and user password in configuration file,resources/RunSettings.properties
+### Modify endpoint,user name and user password in configuration file.(resources/RunSettings.properties)
     endpoint = in01-XXXXXXXXXXXX.ap-southeast-1-aws.vdc-test.zilliz.com
+    username = XXXXXXX
     password = ******
 
 ### Compile project

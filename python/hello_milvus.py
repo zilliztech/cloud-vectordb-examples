@@ -1,7 +1,5 @@
 import configparser
-import os
 import random
-from configparser import ConfigParser
 from pymilvus import (
     connections,
     utility,
@@ -19,6 +17,7 @@ if __name__ == '__main__':
     cfp = configparser.ConfigParser()
     cfp.read('config.ini')
     milvus_host = cfp.get('example', 'endpoint')
+    username = cfp.get('example', 'username')
     password = cfp.get('example', 'password')
 
     """
@@ -28,7 +27,7 @@ if __name__ == '__main__':
     connections.connect("default",
                         host=milvus_host,
                         port=19530,
-                        user="root",
+                        user=username,
                         password=password,
                         secure=True)
 

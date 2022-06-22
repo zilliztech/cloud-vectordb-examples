@@ -9,14 +9,15 @@
     git clone https://github.com/zilliztech/cloud-vectordb-examples.git
 
 ### Install pymilvus
-    pip install pymilvus==2.0.2
+    pip install pymilvus==2.1
 
 ### Go to python folder
     cd cloud-vectordb-examples
     cd python
 
-### Modify endpoint and user password in the configuration file, config.ini
+### Modify endpoint, username and user password in the configuration file.(config.ini)
     endpoint = https://in01-xxxxxxxxxxxxx.aws-ap-southeast-1.vectordb-sit.zillizcloud.com
+    username = XXXXXXX
     password = ******
 
 ### Run hello_milvus.py to run

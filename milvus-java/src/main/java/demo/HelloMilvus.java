@@ -11,7 +11,6 @@ import io.milvus.param.dml.SearchParam;
 import io.milvus.param.index.CreateIndexParam;
 import io.milvus.param.partition.CreatePartitionParam;
 import io.milvus.response.DescCollResponseWrapper;
-import io.milvus.response.GetCollStatResponseWrapper;
 import io.milvus.response.QueryResultsWrapper;
 import io.milvus.response.SearchResultsWrapper;
 import util.PropertyFilesUtil;
@@ -21,7 +20,7 @@ import java.util.List;
 import java.util.Random;
 
 public class HelloMilvus {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         /**
          * step: connect milvus
          * parameters: host, port, username, password, secure=true
@@ -31,7 +30,7 @@ public class HelloMilvus {
                 ConnectParam.newBuilder()
                         .withHost(PropertyFilesUtil.getRunValue("endpoint"))
                         .withPort(19530)
-                        .withAuthorization("root",PropertyFilesUtil.getRunValue("password"))
+                        .withAuthorization(PropertyFilesUtil.getRunValue("username"),PropertyFilesUtil.getRunValue("password"))
                         .withSecure(true)
                         .build());
        /**
