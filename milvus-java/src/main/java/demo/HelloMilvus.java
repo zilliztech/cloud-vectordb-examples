@@ -14,6 +14,7 @@ import io.milvus.response.DescCollResponseWrapper;
 import io.milvus.response.QueryResultsWrapper;
 import io.milvus.response.SearchResultsWrapper;
 import util.PropertyFilesUtil;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,14 +31,28 @@ public class HelloMilvus {
                 ConnectParam.newBuilder()
                         .withHost(PropertyFilesUtil.getRunValue("endpoint"))
                         .withPort(19530)
-                        .withAuthorization(PropertyFilesUtil.getRunValue("username"),PropertyFilesUtil.getRunValue("password"))
+                        .withAuthorization(PropertyFilesUtil.getRunValue("username"), PropertyFilesUtil.getRunValue("password"))
                         .withSecure(true)
                         .build());
-       /**
-        * step: create collection
-        * parameters: primary key field, scalar field, vector field, collection name
-        * return: collection
-        * */
+
+        /***
+         *  step: check collection is existed or not
+         *  parameters: collection name
+         *  desc: drop collection before create
+         */
+        R<Boolean> bookR = milvusClient.hasCollection(HasCollectionParam.newBuilder()
+                .withCollectionName("book").build());
+        if (bookR.getData()){
+            R<RpcStatus> dropR = milvusClient.dropCollection(DropCollectionParam.newBuilder()
+                    .withCollectionName("book").build());
+            System.out.println("********************Collection is existed,Drop collection: " + dropR.getData().getMsg() + "********************");
+        }
+
+        /**
+         * step: create collection
+         * parameters: primary key field, scalar field, vector field, collection name
+         * return: collection
+         * */
         FieldType fieldType1 = FieldType.newBuilder()
                 .withName("book_id")
                 .withDataType(DataType.Int64)
@@ -62,8 +77,7 @@ public class HelloMilvus {
                 .addFieldType(fieldType3)
                 .build();
         R<RpcStatus> collectionR = milvusClient.createCollection(createCollectionParam);
-        System.out.println("********************Create collection:"+collectionR.getData().getMsg()+"********************");
-
+        System.out.println("********************Create collection:" + collectionR.getData().getMsg() + "********************");
         /**
          * step: create partition
          * parameters: collection name, partition name
@@ -73,7 +87,7 @@ public class HelloMilvus {
                         .withCollectionName("book")
                         .withPartitionName("book_part")
                         .build());
-        System.out.println("********************Create partition: "+partitionR.getData().getMsg()+"********************");
+        System.out.println("********************Create partition: " + partitionR.getData().getMsg() + "********************");
 
         /**
          * step: query collection info
@@ -85,7 +99,7 @@ public class HelloMilvus {
                         .withCollectionName("book")
                         .build());
         DescCollResponseWrapper wrapperDescribeCollection = new DescCollResponseWrapper(respDescribeCollection.getData());
-        System.out.println("********************Collection info:"+wrapperDescribeCollection+"********************");
+        System.out.println("********************Collection info:" + wrapperDescribeCollection + "********************");
 
         /**
          * step: insert entities into collection
@@ -115,7 +129,7 @@ public class HelloMilvus {
                 .withFields(fields)
                 .build();
         R<MutationResult> insertR = milvusClient.insert(insertParam);
-        System.out.println("********************Insert success rows: "+insertR.getData().getSuccIndexCount()+"********************");
+        System.out.println("********************Insert success rows: " + insertR.getData().getSuccIndexCount() + "********************");
 
         /**
          * step: create index
@@ -132,7 +146,7 @@ public class HelloMilvus {
                         .withExtraParam(INDEX_PARAM)
                         .withSyncMode(Boolean.FALSE)
                         .build());
-        System.out.println("********************Create index: "+indexR.getData().getMsg()+"********************");
+        System.out.println("********************Create index: " + indexR.getData().getMsg() + "********************");
 
         /***
          * step: load collection into memory
@@ -142,9 +156,9 @@ public class HelloMilvus {
          */
         R<RpcStatus> loadCollectionR = milvusClient.loadCollection(
                 LoadCollectionParam.newBuilder()
-                .withCollectionName("book")
+                        .withCollectionName("book")
                         .build());
-        System.out.println("********************Load collection:"+loadCollectionR.getData().getMsg()+"********************");
+        System.out.println("********************Load collection:" + loadCollectionR.getData().getMsg() + "********************");
 
 
         /**
@@ -154,7 +168,7 @@ public class HelloMilvus {
          * */
         final Integer SEARCH_K = 2;                       // TopK
         final String SEARCH_PARAM = "{\"nprobe\":10}";    // Params
-        List<String> search_output_fields = Arrays.asList("book_id","word_count");
+        List<String> search_output_fields = Arrays.asList("book_id", "word_count");
         List<List<Float>> search_vectors = Arrays.asList(Arrays.asList(0.1f, 0.2f));
 
         SearchParam searchParam = SearchParam.newBuilder()
@@ -168,9 +182,9 @@ public class HelloMilvus {
                 .withExpr("word_count >= 11000")
                 .build();
         R<SearchResults> respSearchR = milvusClient.search(searchParam);
-        SearchResultsWrapper searchResultsWrapper=new SearchResultsWrapper(respSearchR.getData().getResults());
-        System.out.println("********************Search book_id result: "+searchResultsWrapper.getFieldData("book_id",0)+"********************");
-        System.out.println("********************Search word_count result: "+searchResultsWrapper.getFieldData("word_count",0)+"********************");
+        SearchResultsWrapper searchResultsWrapper = new SearchResultsWrapper(respSearchR.getData().getResults());
+        System.out.println("********************Search book_id result: " + searchResultsWrapper.getFieldData("book_id", 0) + "********************");
+        System.out.println("********************Search word_count result: " + searchResultsWrapper.getFieldData("word_count", 0) + "********************");
 
         /**
          * step: conduct a vector query
@@ -185,8 +199,8 @@ public class HelloMilvus {
                 .build();
         R<QueryResults> respQuery = milvusClient.query(queryParam);
         QueryResultsWrapper wrapperQuery = new QueryResultsWrapper(respQuery.getData());
-        System.out.println("********************Query book_id result: "+wrapperQuery.getFieldWrapper("book_id").getFieldData()+"********************");
-        System.out.println("********************Query word_count result: "+wrapperQuery.getFieldWrapper("word_count").getFieldData()+"********************");
+        System.out.println("********************Query book_id result: " + wrapperQuery.getFieldWrapper("book_id").getFieldData() + "********************");
+        System.out.println("********************Query word_count result: " + wrapperQuery.getFieldWrapper("word_count").getFieldData() + "********************");
 
         /**
          * step: delete entities
@@ -198,7 +212,7 @@ public class HelloMilvus {
                         .withCollectionName("book")
                         .withExpr("book_id in [0,1]")
                         .build());
-        System.out.println("********************Delete success count: "+deleteR.getData().getDeleteCnt()+"********************");
+        System.out.println("********************Delete success count: " + deleteR.getData().getDeleteCnt() + "********************");
 
         /**
          * step: release collection
@@ -209,7 +223,7 @@ public class HelloMilvus {
                 ReleaseCollectionParam.newBuilder()
                         .withCollectionName("book")
                         .build());
-        System.out.println("********************Release collection: "+releaseR.getData().getMsg()+"********************");
+        System.out.println("********************Release collection: " + releaseR.getData().getMsg() + "********************");
 
 
         /**
@@ -221,7 +235,7 @@ public class HelloMilvus {
                 DropCollectionParam.newBuilder()
                         .withCollectionName("book")
                         .build());
-        System.out.println("********************Drop collection: "+dropR.getData().getMsg()+"********************");
+        System.out.println("********************Drop collection: " + dropR.getData().getMsg() + "********************");
 
         /**
          * step: close connect
