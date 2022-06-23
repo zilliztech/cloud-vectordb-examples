@@ -8,7 +8,7 @@
 ### Git clone the example code repo
     git clone https://github.com/zilliztech/cloud-vectordb-examples
 
-### Go to milvis-java folder
+### Go to milvus-java folder
     cd cloud-vectordb-examples
     cd milvus-java
 
