@@ -2,8 +2,8 @@
 
 ### Prerequisites
 
-    Java 8 or higher
-    Apache Maven 
+    Java 8+
+    Apache Maven 3.6+
 
 ### Git clone the example code repo
     git clone https://github.com/zilliztech/cloud-vectordb-examples
@@ -14,6 +14,7 @@
 
 ### Modify endpoint,user name and user password in configuration file.(resources/RunSettings.properties)
     endpoint = in01-XXXXXXXXXXXX.ap-southeast-1-aws.vdc-test.zilliz.com
+    port = 19530
     username = XXXXXXX
     password = ******
 

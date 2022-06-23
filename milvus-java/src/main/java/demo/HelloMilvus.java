@@ -30,7 +30,7 @@ public class HelloMilvus {
         final MilvusServiceClient milvusClient = new MilvusServiceClient(
                 ConnectParam.newBuilder()
                         .withHost(PropertyFilesUtil.getRunValue("endpoint"))
-                        .withPort(19530)
+                        .withPort(Integer.parseInt(PropertyFilesUtil.getRunValue("port")))
                         .withAuthorization(PropertyFilesUtil.getRunValue("username"), PropertyFilesUtil.getRunValue("password"))
                         .withSecure(true)
                         .build());
