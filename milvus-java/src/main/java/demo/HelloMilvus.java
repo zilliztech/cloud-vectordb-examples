@@ -31,7 +31,7 @@ public class HelloMilvus {
                 ConnectParam.newBuilder()
                         .withHost(PropertyFilesUtil.getRunValue("endpoint"))
                         .withPort(Integer.parseInt(PropertyFilesUtil.getRunValue("port")))
-                        .withAuthorization(PropertyFilesUtil.getRunValue("username"), PropertyFilesUtil.getRunValue("password"))
+                        .withAuthorization(PropertyFilesUtil.getRunValue("user"), PropertyFilesUtil.getRunValue("password"))
                         .withSecure(true)
                         .build());
 

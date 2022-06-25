@@ -18,7 +18,7 @@
 ### Modify endpoint, username and user password in the configuration file.(config.ini)
     endpoint = https://in01-xxxxxxxxxxxxx.aws-ap-southeast-1.vectordb-sit.zillizcloud.com
     port = 19530
-    username = XXXXXXX
+    user = XXXXXXX
     password = ******
 
 ### Run hello_milvus.py to run

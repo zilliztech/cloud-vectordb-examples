@@ -15,7 +15,7 @@
 ### Modify endpoint,user name and user password in configuration file.(resources/RunSettings.properties)
     endpoint = in01-XXXXXXXXXXXX.ap-southeast-1-aws.vdc-test.zilliz.com
     port = 19530
-    username = XXXXXXX
+    user = XXXXXXX
     password = ******
 
 ### Compile project

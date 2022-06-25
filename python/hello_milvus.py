@@ -18,7 +18,7 @@ if __name__ == '__main__':
     cfp.read('config.ini')
     milvus_host = cfp.get('example', 'endpoint')
     milvus_port = cfp.get('example','port')
-    username = cfp.get('example', 'username')
+    user = cfp.get('example', 'user')
     password = cfp.get('example', 'password')
 
     """
@@ -28,7 +28,7 @@ if __name__ == '__main__':
     connections.connect("default",
                         host=milvus_host,
                         port=milvus_port,
-                        user=username,
+                        user=user,
                         password=password,
                         secure=True)
 
