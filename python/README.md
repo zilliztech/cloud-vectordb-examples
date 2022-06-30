@@ -15,11 +15,11 @@
     cd cloud-vectordb-examples
     cd python
 
-### Modify endpoint, username and user password in the configuration file.(config.ini)
-    endpoint = https://in01-xxxxxxxxxxxxx.aws-ap-southeast-1.vectordb-sit.zillizcloud.com
+### Modify uri, username and user password in the configuration file.(config.ini)
+    uri = in01-xxxxxxxxxxxxx.aws-ap-southeast-1.vectordb-sit.zillizcloud.com
     port = 19530
-    user = XXXXXXX
-    password = ******
+    user = your-username
+    password = your-password
 
 ### Run hello_milvus.py to run
     Python hello_milvus.py

@@ -16,7 +16,7 @@ if __name__ == '__main__':
 
     cfp = configparser.ConfigParser()
     cfp.read('config.ini')
-    milvus_host = cfp.get('example', 'endpoint')
+    milvus_host = cfp.get('example', 'uri')
     milvus_port = cfp.get('example','port')
     user = cfp.get('example', 'user')
     password = cfp.get('example', 'password')

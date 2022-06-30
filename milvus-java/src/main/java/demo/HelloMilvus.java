@@ -29,7 +29,7 @@ public class HelloMilvus {
          * */
         final MilvusServiceClient milvusClient = new MilvusServiceClient(
                 ConnectParam.newBuilder()
-                        .withHost(PropertyFilesUtil.getRunValue("endpoint"))
+                        .withHost(PropertyFilesUtil.getRunValue("uri"))
                         .withPort(Integer.parseInt(PropertyFilesUtil.getRunValue("port")))
                         .withAuthorization(PropertyFilesUtil.getRunValue("user"), PropertyFilesUtil.getRunValue("password"))
                         .withSecure(true)
@@ -42,7 +42,7 @@ public class HelloMilvus {
          */
         R<Boolean> bookR = milvusClient.hasCollection(HasCollectionParam.newBuilder()
                 .withCollectionName("book").build());
-        if (bookR.getData()){
+        if (bookR.getData()) {
             R<RpcStatus> dropR = milvusClient.dropCollection(DropCollectionParam.newBuilder()
                     .withCollectionName("book").build());
             System.out.println("********************Collection is existed,Drop collection: " + dropR.getData().getMsg() + "********************");
