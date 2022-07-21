@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Random;
 
 
-public class helloZillizVectorDB {
+public class HelloZillizVectorDB {
     public static void main(String[] args) {
         // connect to milvus
         final MilvusServiceClient milvusClient = new MilvusServiceClient(
