@@ -25,7 +25,7 @@
     Python hello_zilliz_vectordb.py
 
 ### It should print information on the console
-    totally insert 100000 entities cost 86 seconds
+    totally insert 100000 entities cost 6.0288 seconds
     collection book entities: 100000
     collection book load in 3.674 seconds
     search 0 latency: 0.0167 seconds
