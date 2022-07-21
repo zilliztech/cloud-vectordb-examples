@@ -56,7 +56,7 @@ if __name__ == '__main__':
     print(f"collection {collection_name} entities: {collection.num_entities}")
 
     # build index
-    index_params = {"index_type": "HNSW", "metric_type": "L2", "params": {"M": 16, "efConstruction": 200}}
+    index_params = {"index_type": "HNSW", "metric_type": "L2", "params": {"M": 8, "efConstruction": 100}}
     t0 = time.time()
     collection.create_index(field_name=book_intro_field.name, index_params=index_params)
     t1 = time.time()

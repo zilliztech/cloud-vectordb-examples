@@ -98,13 +98,13 @@ public class HelloZillizVectorDB {
         System.out.println("totally insert " + singleNum * insertRounds + " entities cost " + insertTotalTime + " seconds");
 
         // build index
-        final IndexType INDEX_TYPE = IndexType.IVF_FLAT;   // IndexType
-        final String INDEX_PARAM = "{\"nlist\":1024}";     // ExtraParam
+        final IndexType INDEX_TYPE = IndexType.HNSW;   // IndexType
+        final String INDEX_PARAM = "{\"M\":16,\"efConstruction\":64}";     // ExtraParam
         long startIndexTime = System.currentTimeMillis();
         R<RpcStatus> indexR = milvusClient.createIndex(
                 CreateIndexParam.newBuilder()
-                        .withCollectionName("book")
-                        .withFieldName("book_intro")
+                        .withCollectionName(collectionName)
+                        .withFieldName(bookIntroField.getName())
                         .withIndexType(INDEX_TYPE)
                         .withMetricType(MetricType.L2)
                         .withExtraParam(INDEX_PARAM)
