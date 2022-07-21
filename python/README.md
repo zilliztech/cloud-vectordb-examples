@@ -28,9 +28,9 @@
     totally insert 100000 entities cost 86 seconds
     collection book entities: 100000
     collection book load in 3.674 seconds
-    search 0 latency: 0.167 seconds
-    search 1 latency: 0.168 seconds
-    search 2 latency: 0.171 seconds
+    search 0 latency: 0.0167 seconds
+    search 1 latency: 0.0168 seconds
+    search 2 latency: 0.0171 seconds
     ...
     ...
     
