@@ -16,7 +16,7 @@
     cd python
 
 ### Modify uri, username and user password in the configuration file.(config.ini)
-    uri = in01-xxxxxxxxxxxxx.aws-ap-southeast-1.vectordb-sit.zillizcloud.com
+    uri = in01-xxxxxxxxxxxxx.aws-us-west-2.vectordb.zillizcloud.com
     port = 19530
     user = your-username
     password = your-password
