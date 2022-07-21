@@ -25,13 +25,12 @@
     Python hello_zilliz_vectordb.py
 
 ### It should print information on the console
-    totally insert 100000 entities cost xx seconds
+    totally insert 100000 entities cost 86 seconds
     collection book entities: 100000
-    collection book build index in xx seconds
-    collection book load in xx seconds
-    search 0 latency: 0.xxx seconds
-    search 1 latency: 0.xxx seconds
-    search 2 latency: 0.xxx seconds
+    collection book load in 3.674 seconds
+    search 0 latency: 0.167 seconds
+    search 1 latency: 0.168 seconds
+    search 2 latency: 0.171 seconds
     ...
     ...
     
