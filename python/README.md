@@ -22,14 +22,16 @@
     password = your-password
 
 ### Run hello_milvus.py to run
-    Python hello_milvus.py
+    Python hello_zilliz_vectordb.py
 
 ### It should print information on the console
-    Collection info: schema, descrption... 
-    partition info: name, description...
-    insert count:  2000
-    create index: code=0
-    search result: ["['(distance: 0.0009647159022279084, id: 47)', '(distance: 0.0012260561343282461, id: 762)']"]
-    query count:  4
+    totally insert 100000 entities cost xx seconds
+    collection book entities: 100000
+    collection book build index in xx seconds
+    collection book load in xx seconds
+    search 0 latency: 0.xxx seconds
+    search 1 latency: 0.xxx seconds
+    search 2 latency: 0.xxx seconds
+    ...
     ...
     

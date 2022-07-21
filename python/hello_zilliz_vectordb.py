@@ -20,9 +20,14 @@ if __name__ == '__main__':
                         user=user,
                         password=password,
                         secure=True)
-    print(utility.list_collections())
 
-    # create a collection with customized primary field: id_field
+    # Check if the collection exists
+    collection_name = "book"
+    check_collection = utility.has_collection(collection_name)
+    if check_collection:
+        drop_result = utility.drop_collection(collection_name)
+
+    # create a collection with customized primary field: book_id_field
     dim = 128
     book_id_field = FieldSchema(name="book_id", dtype=DataType.INT64, is_primary=True, description="customized primary id")
     word_count_field = FieldSchema(name="word_count", dtype=DataType.INT64, description="word count")
@@ -30,7 +35,6 @@ if __name__ == '__main__':
     schema = CollectionSchema(fields=[book_id_field, word_count_field, book_intro_field],
                           auto_id=False,
                           description="my first collection")
-    collection_name = "book"
     collection = Collection(name=collection_name, schema=schema)
 
     # insert data with customized ids
@@ -79,5 +83,6 @@ if __name__ == '__main__':
         t1 = time.time()
         print(f"search {i} latency: {round(t1-t0, 4)} seconds")
 
+    connections.disconnect("default")
     print("completed")
 

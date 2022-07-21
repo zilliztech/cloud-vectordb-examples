@@ -22,16 +22,14 @@
     mvn compile
 
 ### Run HelloMilvus.java
-    mvn exec:java  -Dexec.mainClass="demo.HelloMilvus"
+    mvn exec:java  -Dexec.mainClass="demo.HelloZillizVectorDB"
 
 ### It should print information on the console
-    Create collection:Success
-    Create partition: Success
-    Collection info:Collection Description...
-    Insert success rows: 2000
-    Insert success rows: 2000
-    Load collection:Success
-    Search book_id result: [1886, 1652]
-    Search word_count result: [11886, 11652]
+    totally insert 100000 entities cost xxx seconds
+    collection book build index in xx seconds
+    collection book load in x seconds
+    search 0 latency: 0.xxx seconds
+    search 1 latency: 0.xxx seconds
+    search 2 latency: 0.xxx seconds
     ...
     ...
