@@ -22,7 +22,7 @@
     mvn compile
 
 ### Run HelloMilvus.java
-    mvn exec:java  -Dexec.mainClass="demo.HelloZillizVectorDB"
+    mvn exec:java  -Dexec.mainClass="demo.helloZillizVectorDB"
 
 ### It should print information on the console
     totally insert 100000 entities cost 87 seconds

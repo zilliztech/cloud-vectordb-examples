@@ -2,14 +2,12 @@ package demo;
 
 import io.milvus.client.MilvusServiceClient;
 import io.milvus.grpc.DataType;
-import io.milvus.grpc.GetCollectionStatisticsResponse;
 import io.milvus.grpc.MutationResult;
 import io.milvus.param.*;
 import io.milvus.param.collection.*;
 import io.milvus.param.dml.InsertParam;
 import io.milvus.param.dml.SearchParam;
 import io.milvus.param.index.CreateIndexParam;
-import io.milvus.response.GetCollStatResponseWrapper;
 import util.PropertyFilesUtil;
 
 import java.util.ArrayList;
@@ -18,7 +16,7 @@ import java.util.List;
 import java.util.Random;
 
 
-public class HelloZillizVectorDB {
+public class helloZillizVectorDB {
     public static void main(String[] args) {
         // connect to milvus
         final MilvusServiceClient milvusClient = new MilvusServiceClient(
