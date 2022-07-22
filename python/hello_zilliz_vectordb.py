@@ -20,6 +20,7 @@ if __name__ == '__main__':
                         user=user,
                         password=password,
                         secure=True)
+    print(f"start to connect to {milvus_host}")
 
     # Check if the collection exists
     collection_name = "book"
@@ -36,6 +37,7 @@ if __name__ == '__main__':
                           auto_id=False,
                           description="my first collection")
     collection = Collection(name=collection_name, schema=schema)
+    print(f"create collection {collection_name} successfully")
 
     # insert data with customized ids
     nb = 10000
@@ -52,7 +54,7 @@ if __name__ == '__main__':
         ins_rt = time.time() - t0
         start += nb
         total_rt += ins_rt
-    print(f"totally insert {nb * insert_rounds} entities cost {total_rt} seconds")
+    print(f"totally insert {nb * insert_rounds} entities cost {round(total_rt,4)} seconds")
     print(f"collection {collection_name} entities: {collection.num_entities}")
 
     # build index

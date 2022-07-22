@@ -26,6 +26,7 @@ public class HelloZillizVectorDB {
                         .withAuthorization(PropertyFilesUtil.getRunValue("user"), PropertyFilesUtil.getRunValue("password"))
                         .withSecure(true)
                         .build());
+        System.out.println("start to connect to "+PropertyFilesUtil.getRunValue("uri"));
 
         // Check if the collection exists
         String collectionName = "book";
@@ -63,6 +64,7 @@ public class HelloZillizVectorDB {
                 .addFieldType(bookIntroField)
                 .build();
         milvusClient.createCollection(createCollectionParam);
+        System.out.println("create collection "+collectionName+" successfully");
 
         //insert data with customized ids
         Random ran = new Random();

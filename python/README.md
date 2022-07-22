@@ -25,6 +25,8 @@
     Python hello_zilliz_vectordb.py
 
 ### It should print information on the console
+    start to connect to in01-xxxxxxxxxxxxx.aws-us-west-2.vectordb.zillizcloud.com
+    create collection book successfully
     totally insert 100000 entities cost 6.0288 seconds
     collection book entities: 100000
     collection book load in 2.5229 seconds

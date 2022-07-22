@@ -25,6 +25,8 @@
     mvn exec:java  -Dexec.mainClass="demo.HelloZillizVectorDB"
 
 ### It should print information on the console
+    start to connect to in01-xxxxxxxxxxxxx.aws-us-west-2.vectordb.zillizcloud.com
+    create collection book successfully    
     totally insert 100000 entities cost 9.3321 seconds
     collection book load in 1.718 seconds
     search 0 latency: 0.0154 seconds
