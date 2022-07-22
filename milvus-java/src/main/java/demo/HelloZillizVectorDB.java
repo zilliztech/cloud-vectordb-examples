@@ -83,9 +83,9 @@ public class HelloZillizVectorDB {
                 book_intro_array.add(vector);
             }
             List<InsertParam.Field> fields = new ArrayList<>();
-            fields.add(new InsertParam.Field(bookIdField.getName(), DataType.Int64, book_id_array));
-            fields.add(new InsertParam.Field(wordCountField.getName(), DataType.Int64, word_count_array));
-            fields.add(new InsertParam.Field(bookIntroField.getName(), DataType.FloatVector, book_intro_array));
+            fields.add(new InsertParam.Field(bookIdField.getName(), book_id_array));
+            fields.add(new InsertParam.Field(wordCountField.getName(), word_count_array));
+            fields.add(new InsertParam.Field(bookIntroField.getName(),  book_intro_array));
             InsertParam insertParam = InsertParam.newBuilder()
                     .withCollectionName(collectionName)
                     .withFields(fields)
