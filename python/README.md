@@ -8,7 +8,7 @@
 ### Git clone the example code repo
     git clone https://github.com/zilliztech/cloud-vectordb-examples.git
 
-### Install pymilvus（2.1.0.dev98 or latest）
+### Install pymilvus
     pip install -i https://test.pypi.org/simple/ pymilvus==2.1.0
 
 ### Go to python folder
