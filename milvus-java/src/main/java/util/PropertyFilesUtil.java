@@ -1,30 +1,29 @@
 package util;
 
-import org.apache.log4j.Logger;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
 
 public class PropertyFilesUtil {
-    static Logger logger=Logger.getLogger(PropertyFilesUtil.class);
     public static HashMap<String,String> readPropertyFile(String propertyFileName) {
         HashMap<String,String> hashMap=new HashMap<>();
         Properties prop = new Properties();
         try {
-            InputStream in = new BufferedInputStream(new FileInputStream(propertyFileName));
+            InputStream in = new BufferedInputStream(Files.newInputStream(Paths.get(propertyFileName)));
             prop.load(in);
-            Iterator<String> it = prop.stringPropertyNames().iterator();
-            while (it.hasNext()) {
-                String key=it.next();
-                hashMap.put(key,prop.getProperty(key));
+            for (String key : prop.stringPropertyNames()) {
+                hashMap.put(key, prop.getProperty(key));
             }
             in.close();
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            throw new RuntimeException(e);
         }
         return hashMap;
     }
