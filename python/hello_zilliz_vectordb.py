@@ -9,18 +9,16 @@ if __name__ == '__main__':
     # connect to milvus
     cfp = configparser.ConfigParser()
     cfp.read('config.ini')
-    milvus_host = cfp.get('example', 'uri')
-    milvus_port = cfp.get('example', 'port')
+    milvus_uri = cfp.get('example', 'uri')
     user = cfp.get('example', 'user')
     password = cfp.get('example', 'password')
 
     connections.connect("default",
-                        host=milvus_host,
-                        port=milvus_port,
+                        uri=milvus_uri,
                         user=user,
                         password=password,
                         secure=True)
-    print(f"start to connect to {milvus_host}")
+    print(f"start to connect to {milvus_uri}")
 
     # Check if the collection exists
     collection_name = "book"
