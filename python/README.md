@@ -24,14 +24,23 @@
     Python hello_zilliz_vectordb.py
 
 ### It should print information on the console
-    start to connect to in01-xxxxxxxxxxxxx.aws-us-west-2.vectordb.zillizcloud.com
-    create collection book successfully
-    totally insert 100000 entities cost 6.0288 seconds
-    collection book entities: 100000
-    collection book load in 2.5229 seconds
-    search 0 latency: 0.0057 seconds
-    search 1 latency: 0.0049 seconds
-    search 2 latency: 0.0051 seconds
+    Connecting to DB: https://in01-xxxxxxxxxxxxx.aws-us-west-2.vectordb.zillizcloud.com
+    Success!
+    Creating example collection: book
+    Schema: {...}
+    Success!
+    Inserting 100000 entities... 
+    Succeed in 6.0288 seconds!
+    Building AutoIndex...
+    Succeed in in 2.9118 seconds!
+    Loading collection...
+    Succeed in 2.5229 seconds!
+    Searching vector:[[...][...]...]
+    search 0 latency: 0.0057 seconds!
+    Searching vector:[[...][...]...]
+    search 1 latency: 0.0049 seconds!
+    Searching vector:[[...][...]...]
+    search 2 latency: 0.0051 seconds!
     ...
     ...
     

@@ -18,14 +18,14 @@ if __name__ == '__main__':
                         user=user,
                         password=password,
                         secure=True)
-    print(f"start to connect to {milvus_uri}")
+    print(f"Connecting to DB: {milvus_uri}")
 
     # Check if the collection exists
     collection_name = "book"
     check_collection = utility.has_collection(collection_name)
     if check_collection:
         drop_result = utility.drop_collection(collection_name)
-
+    print("Success!")
     # create a collection with customized primary field: book_id_field
     dim = 128
     book_id_field = FieldSchema(name="book_id", dtype=DataType.INT64, is_primary=True, description="customized primary id")
@@ -34,15 +34,18 @@ if __name__ == '__main__':
     schema = CollectionSchema(fields=[book_id_field, word_count_field, book_intro_field],
                           auto_id=False,
                           description="my first collection")
+    print(f"Creating example collection: {collection_name}")
     collection = Collection(name=collection_name, schema=schema)
-    print(f"create collection {collection_name} successfully")
+    print(f"Schema: {schema}")
+    print("Success!")
 
     # insert data with customized ids
     nb = 10000
     insert_rounds = 10
     start = 0           # first primary key id
     total_rt = 0        # total response time for inert
-    for i in range(10):
+    print(f"Inserting {nb * insert_rounds} entities... ")
+    for i in range(insert_rounds):
         book_ids = [i for i in range(start, start+nb)]
         word_counts = [random.randint(1, 100) for i in range(nb)]
         book_intros = [[random.random() for _ in range(dim)] for _ in range(nb)]
@@ -52,28 +55,31 @@ if __name__ == '__main__':
         ins_rt = time.time() - t0
         start += nb
         total_rt += ins_rt
-    print(f"totally insert {nb * insert_rounds} entities cost {round(total_rt,4)} seconds")
-    print(f"collection {collection_name} entities: {collection.num_entities}")
+    print(f"Succeed in {round(total_rt,4)} seconds!")
+    # print(f"collection {collection_name} entities: {collection.num_entities}")
 
     # build index
-    index_params = {"index_type": "HNSW", "metric_type": "L2", "params": {"M": 8, "efConstruction": 100}}
+    index_params = {"index_type": "AUTOINDEX", "metric_type": "L2", "params": {}}
     t0 = time.time()
+    print("Building AutoIndex...")
     collection.create_index(field_name=book_intro_field.name, index_params=index_params)
     t1 = time.time()
-    print(f"collection {collection_name} build index in {round(t1-t0, 4)} seconds")
+    print(f"Succeed in in {round(t1-t0, 4)} seconds!")
 
     # load collection
     t0 = time.time()
+    print("Loading collection...")
     collection.load()
     t1 = time.time()
-    print(f"collection {collection_name} load in {round(t1-t0, 4)} seconds")
+    print(f"Succeed in {round(t1-t0, 4)} seconds!")
 
     # search
     nq = 1
-    search_params = {"metric_type": "L2", "params": {"ef": 32}}
+    search_params = {"metric_type": "L2", "level": 1}
     topk = 1
     for i in range(10):
         search_vec = [[random.random() for _ in range(dim)] for _ in range(nq)]
+        print(f"Searching vector: {search_vec}")
         t0 = time.time()
         results = collection.search(search_vec,
                                 anns_field=book_intro_field.name,
@@ -81,8 +87,8 @@ if __name__ == '__main__':
                                 limit=topk,
                                 guarantee_timestamp=1)
         t1 = time.time()
-        print(f"search {i} latency: {round(t1-t0, 4)} seconds")
+        print(f"Result:{results}")
+        print(f"search {i} latency: {round(t1-t0, 4)} seconds!")
 
     connections.disconnect("default")
-    print("completed")
 
