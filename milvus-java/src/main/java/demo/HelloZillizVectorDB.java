@@ -1,8 +1,11 @@
 package demo;
 
+
 import io.milvus.client.MilvusServiceClient;
 import io.milvus.grpc.DataType;
+import io.milvus.grpc.DescribeCollectionResponse;
 import io.milvus.grpc.MutationResult;
+import io.milvus.grpc.SearchResults;
 import io.milvus.param.*;
 import io.milvus.param.collection.*;
 import io.milvus.param.dml.InsertParam;
@@ -24,20 +27,17 @@ public class HelloZillizVectorDB {
                         .withHost(PropertyFilesUtil.getRunValue("uri"))
                         .withPort(Integer.parseInt(PropertyFilesUtil.getRunValue("port")))
                         .withAuthorization(PropertyFilesUtil.getRunValue("user"), PropertyFilesUtil.getRunValue("password"))
-                        .withSecure(true)
+                        //.withSecure(true)
                         .build());
-        System.out.println("start to connect to "+PropertyFilesUtil.getRunValue("uri"));
-
+        System.out.println("Connecting to DB: " + PropertyFilesUtil.getRunValue("uri"));
         // Check if the collection exists
         String collectionName = "book";
-        R<Boolean> bookR = milvusClient.hasCollection(HasCollectionParam.newBuilder()
-                .withCollectionName(collectionName).build());
-        if (bookR.getData()) {
-            R<RpcStatus> dropR = milvusClient.dropCollection(DropCollectionParam.newBuilder()
-                    .withCollectionName("book").build());
-            System.out.println("Collection " + collectionName + " is existed,Drop collection: " + dropR.getData().getMsg());
+        R<DescribeCollectionResponse> responseR =
+                milvusClient.describeCollection(DescribeCollectionParam.newBuilder().withCollectionName(collectionName).build());
+        if (responseR.getData() != null) {
+            milvusClient.dropCollection(DropCollectionParam.newBuilder().withCollectionName(collectionName).build());
         }
-
+        System.out.println("Success!");
         // create a collection with customized primary field: book_id_field
         int dim = 128;
         FieldType bookIdField = FieldType.newBuilder()
@@ -57,20 +57,23 @@ public class HelloZillizVectorDB {
                 .build();
         CreateCollectionParam createCollectionParam = CreateCollectionParam.newBuilder()
                 .withCollectionName(collectionName)
-                .withDescription("Test book search")
+                .withDescription("my first collection")
                 .withShardsNum(2)
                 .addFieldType(bookIdField)
                 .addFieldType(wordCountField)
                 .addFieldType(bookIntroField)
                 .build();
+        System.out.println("Creating example collection: " + collectionName);
+        System.out.println("Schema: " + createCollectionParam);
         milvusClient.createCollection(createCollectionParam);
-        System.out.println("create collection "+collectionName+" successfully");
+        System.out.println("Success!");
 
         //insert data with customized ids
         Random ran = new Random();
-        int singleNum = 10000;
-        int insertRounds = 10;
+        int singleNum = 1000;
+        int insertRounds = 1;
         long insertTotalTime = 0L;
+        System.out.println("Inserting " + singleNum * insertRounds + " entities... ");
         for (int r = 0; r < insertRounds; r++) {
             List<Long> book_id_array = new ArrayList<>();
             List<Long> word_count_array = new ArrayList<>();
@@ -87,7 +90,7 @@ public class HelloZillizVectorDB {
             List<InsertParam.Field> fields = new ArrayList<>();
             fields.add(new InsertParam.Field(bookIdField.getName(), book_id_array));
             fields.add(new InsertParam.Field(wordCountField.getName(), word_count_array));
-            fields.add(new InsertParam.Field(bookIntroField.getName(),  book_intro_array));
+            fields.add(new InsertParam.Field(bookIntroField.getName(), book_intro_array));
             InsertParam insertParam = InsertParam.newBuilder()
                     .withCollectionName(collectionName)
                     .withFields(fields)
@@ -95,13 +98,12 @@ public class HelloZillizVectorDB {
             long startTime = System.currentTimeMillis();
             R<MutationResult> insertR = milvusClient.insert(insertParam);
             long endTime = System.currentTimeMillis();
-            insertTotalTime += (endTime - startTime) / 1000.0;
+            insertTotalTime += (endTime - startTime) / 1000.00;
         }
-        System.out.println("totally insert " + singleNum * insertRounds + " entities cost " + insertTotalTime + " seconds");
-
+        System.out.println("Succeed in " + insertTotalTime + " seconds!");
         // build index
-        final IndexType INDEX_TYPE = IndexType.HNSW;   // IndexType
-        final String INDEX_PARAM = "{\"M\":16,\"efConstruction\":64}";     // ExtraParam
+        System.out.println("Building AutoIndex...");
+        final IndexType INDEX_TYPE = IndexType.AUTOINDEX;   // IndexType
         long startIndexTime = System.currentTimeMillis();
         R<RpcStatus> indexR = milvusClient.createIndex(
                 CreateIndexParam.newBuilder()
@@ -109,15 +111,13 @@ public class HelloZillizVectorDB {
                         .withFieldName(bookIntroField.getName())
                         .withIndexType(INDEX_TYPE)
                         .withMetricType(MetricType.L2)
-                        .withExtraParam(INDEX_PARAM)
-                        .withSyncMode(Boolean.TRUE)
-                        .withSyncWaitingInterval(500L)
-                        .withSyncWaitingTimeout(30L)
+                        .withSyncMode(Boolean.FALSE)
                         .build());
         long endIndexTime = System.currentTimeMillis();
-        System.out.println("collection " + collectionName + " build index in " + (endIndexTime - startIndexTime) / 1000.0 + " seconds");
+        System.out.println("Succeed in " + (endIndexTime - startIndexTime) / 1000.00 + " seconds!");
 
         // load collection
+        System.out.println("Loading collection...");
         long startLoadTime = System.currentTimeMillis();
         milvusClient.loadCollection(LoadCollectionParam.newBuilder()
                 .withCollectionName(collectionName)
@@ -126,7 +126,7 @@ public class HelloZillizVectorDB {
                 .withSyncLoadWaitingTimeout(30L)
                 .build());
         long endLoadTime = System.currentTimeMillis();
-        System.out.println("collection " + collectionName + " load in " + (endLoadTime - startLoadTime) / 1000.0 + " seconds");
+        System.out.println("Succeed in " + (endLoadTime - startLoadTime) / 1000.00 + " seconds");
 
         // search
         final Integer SEARCH_K = 2;                       // TopK
@@ -147,14 +147,15 @@ public class HelloZillizVectorDB {
                     .withVectorFieldName(bookIntroField.getName())
                     .withParams(SEARCH_PARAM)
                     .build();
-            long startSearchTime=System.currentTimeMillis();
-            milvusClient.search(searchParam);
-            long endSearchTime=System.currentTimeMillis();
-            System.out.println("search "+i+" latency: "+(endSearchTime-startSearchTime)/1000.0+" seconds");
+            long startSearchTime = System.currentTimeMillis();
+            R<SearchResults> search = milvusClient.search(searchParam);
+            long endSearchTime = System.currentTimeMillis();
+            System.out.println("Searching vector: " + search_vectors);
+            System.out.println("Result: " + search.getData().getResults().getFieldsDataList());
+            System.out.println("search " + i + " latency: " + (endSearchTime - startSearchTime) / 1000.00 + " seconds");
         }
 
         milvusClient.close();
-        System.out.println("Competed");
     }
 
 }
