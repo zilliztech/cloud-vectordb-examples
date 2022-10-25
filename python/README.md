@@ -9,14 +9,14 @@
     git clone https://github.com/zilliztech/cloud-vectordb-examples.git
 
 ### Install pymilvus
-    pip install pymilvus==2.1.0
+    pip install pymilvus
 
 ### Go to python folder
     cd cloud-vectordb-examples
     cd python
 
 ### Modify uri, username and user password in the configuration file.(config.ini)
-    uri = https://in01-xxxxxxxxxxxxx.aws-us-west-2.vectordb.zillizcloud.com:19530
+    uri = https://in01-xxxxxxxxxxxxx.aws-us-west-2.vectordb.zillizcloud.com:XXXXX
     user = your-username
     password = your-password
 
@@ -32,7 +32,7 @@
     Inserting 100000 entities... 
     Succeed in 6.0288 seconds!
     Building AutoIndex...
-    Succeed in in 2.9118 seconds!
+    Succeed in in 59.9118 seconds!
     Loading collection...
     Succeed in 2.5229 seconds!
     Searching vector:[[...][...]...]
