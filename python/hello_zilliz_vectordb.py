@@ -75,7 +75,7 @@ if __name__ == '__main__':
 
     # search
     nq = 1
-    search_params = {"metric_type": "L2", "level": 1}
+    search_params = {"metric_type": "L2",  "params": {"level": 2}}
     topk = 1
     for i in range(10):
         search_vec = [[random.random() for _ in range(dim)] for _ in range(nq)]
