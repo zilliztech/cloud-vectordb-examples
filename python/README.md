@@ -24,7 +24,7 @@
     Python hello_zilliz_vectordb.py
 
 ### It should print information on the console
-    Connecting to DB: https://in01-xxxxxxxxxxxxx.aws-us-west-2.vectordb.zillizcloud.com
+    Connecting to DB: https://in01-xxxxxxxxxxxxx.aws-us-west-2.vectordb.zillizcloud.com:XXXXX
     Success!
     Creating example collection: book
     Schema: {...}
@@ -32,7 +32,7 @@
     Inserting 100000 entities... 
     Succeed in 6.0288 seconds!
     Building AutoIndex...
-    Succeed in in 59.9118 seconds!
+    Succeed in in 18.9118 seconds!
     Loading collection...
     Succeed in 2.5229 seconds!
     Searching vector:[[...][...]...]
