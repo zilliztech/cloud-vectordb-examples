@@ -13,8 +13,7 @@
     cd milvus-java
 
 ### Modify uri, user name and user password in configuration file.(resources/RunSettings.properties)
-    uri = in01-XXXXXXXXXXXX.aws-us-west-2.vectordb.zillizcloud.com
-    port = 19530
+    uri = https://in01-XXXXXXXXXXXX.aws-us-west-2.vectordb.zillizcloud.com:XXXXX
     user = your-username
     password = your-password
 
@@ -33,7 +32,7 @@
     Inserting 100000 entities... 
     Succeed in 9.3321 seconds!
     Building AutoIndex...
-    Succeed in in 4.9318 seconds!
+    Succeed in in 58.9318 seconds!
     Loading collection...
     Succeed in 1.718 seconds!
     Searching vector:[[...][...]...]

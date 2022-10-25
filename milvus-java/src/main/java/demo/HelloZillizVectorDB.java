@@ -24,10 +24,8 @@ public class HelloZillizVectorDB {
         // connect to milvus
         final MilvusServiceClient milvusClient = new MilvusServiceClient(
                 ConnectParam.newBuilder()
-                        .withHost(PropertyFilesUtil.getRunValue("uri"))
-                        .withPort(Integer.parseInt(PropertyFilesUtil.getRunValue("port")))
+                        .withUri(PropertyFilesUtil.getRunValue("uri"))
                         .withAuthorization(PropertyFilesUtil.getRunValue("user"), PropertyFilesUtil.getRunValue("password"))
-                        //.withSecure(true)
                         .build());
         System.out.println("Connecting to DB: " + PropertyFilesUtil.getRunValue("uri"));
         // Check if the collection exists
@@ -70,8 +68,8 @@ public class HelloZillizVectorDB {
 
         //insert data with customized ids
         Random ran = new Random();
-        int singleNum = 1000;
-        int insertRounds = 1;
+        int singleNum = 10000;
+        int insertRounds = 10;
         long insertTotalTime = 0L;
         System.out.println("Inserting " + singleNum * insertRounds + " entities... ");
         for (int r = 0; r < insertRounds; r++) {
@@ -111,7 +109,9 @@ public class HelloZillizVectorDB {
                         .withFieldName(bookIntroField.getName())
                         .withIndexType(INDEX_TYPE)
                         .withMetricType(MetricType.L2)
-                        .withSyncMode(Boolean.FALSE)
+                        .withSyncMode(Boolean.TRUE)
+                        .withSyncWaitingInterval(500L)
+                        .withSyncWaitingTimeout(30L)
                         .build());
         long endIndexTime = System.currentTimeMillis();
         System.out.println("Succeed in " + (endIndexTime - startIndexTime) / 1000.00 + " seconds!");
@@ -123,7 +123,7 @@ public class HelloZillizVectorDB {
                 .withCollectionName(collectionName)
                 .withSyncLoad(true)
                 .withSyncLoadWaitingInterval(500L)
-                .withSyncLoadWaitingTimeout(30L)
+                .withSyncLoadWaitingTimeout(100L)
                 .build());
         long endLoadTime = System.currentTimeMillis();
         System.out.println("Succeed in " + (endLoadTime - startLoadTime) / 1000.00 + " seconds");
