@@ -24,7 +24,7 @@
     mvn exec:java  -Dexec.mainClass="demo.HelloZillizVectorDB"
 
 ### It should print information on the console
-    Connecting to DB: https://in01-xxxxxxxxxxxxx.aws-us-west-2.vectordb.zillizcloud.com
+    Connecting to DB: https://in01-XXXXXXXXXXXXX.aws-us-west-2.vectordb.zillizcloud.com:XXXXX
     Success!
     Creating example collection: book
     Schema: {...}
@@ -32,7 +32,7 @@
     Inserting 100000 entities... 
     Succeed in 9.3321 seconds!
     Building AutoIndex...
-    Succeed in in 58.9318 seconds!
+    Succeed in in 18.9318 seconds!
     Loading collection...
     Succeed in 1.718 seconds!
     Searching vector:[[...][...]...]
