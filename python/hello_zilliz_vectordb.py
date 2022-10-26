@@ -40,8 +40,8 @@ if __name__ == '__main__':
     print("Success!")
 
     # insert data with customized ids
-    nb = 10000
-    insert_rounds = 10
+    nb = 100000
+    insert_rounds = 60
     start = 0           # first primary key id
     total_rt = 0        # total response time for inert
     print(f"Inserting {nb * insert_rounds} entities... ")
@@ -77,7 +77,7 @@ if __name__ == '__main__':
     nq = 1
     search_params = {"metric_type": "L2", "level": 1}
     topk = 1
-    for i in range(10):
+    for i in range(10000):
         search_vec = [[random.random() for _ in range(dim)] for _ in range(nq)]
         print(f"Searching vector: {search_vec}")
         t0 = time.time()
