@@ -64,7 +64,7 @@ if __name__ == '__main__':
     print("Building AutoIndex...")
     collection.create_index(field_name=book_intro_field.name, index_params=index_params)
     t1 = time.time()
-    print(f"Succeed in in {round(t1-t0, 4)} seconds!")
+    print(f"Succeed in {round(t1-t0, 4)} seconds!")
 
     # load collection
     t0 = time.time()
