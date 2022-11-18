@@ -14,8 +14,8 @@
 
 ### Modify uri, user name and user password in configuration file.(resources/RunSettings.properties)
     uri = https://in01-XXXXXXXXXXXX.aws-us-west-2.vectordb.zillizcloud.com:XXXXX
-    user = your-username
-    password = your-password
+    user = db_admin
+    password = ********
 
 ### Compile project
     mvn compile
