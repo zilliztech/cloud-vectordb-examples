@@ -13,6 +13,7 @@ if __name__ == '__main__':
     user = cfp.get('example', 'user')
     password = cfp.get('example', 'password')
 
+    print("begin connect....")
     connections.connect("default",
                         uri=milvus_uri,
                         user=user,
@@ -41,7 +42,7 @@ if __name__ == '__main__':
 
     # insert data with customized ids
     nb = 10000
-    insert_rounds = 600
+    insert_rounds = 100
     start = 0           # first primary key id
     total_rt = 0        # total response time for inert
     print(f"Inserting {nb * insert_rounds} entities... ")
