@@ -41,7 +41,7 @@ if __name__ == '__main__':
 
     # insert data with customized ids
     nb = 10000
-    insert_rounds = 600
+    insert_rounds = 10
     start = 0           # first primary key id
     total_rt = 0        # total response time for inert
     print(f"Inserting {nb * insert_rounds} entities... ")
