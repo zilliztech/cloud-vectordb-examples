@@ -24,10 +24,8 @@ public class HelloZillizVectorDB {
         // connect to milvus
         final MilvusServiceClient milvusClient = new MilvusServiceClient(
                 ConnectParam.newBuilder()
-                        .withHost(PropertyFilesUtil.getRunValue("uri"))
-                        .withPort(Integer.parseInt(PropertyFilesUtil.getRunValue("port")))
+                        .withUri(PropertyFilesUtil.getRunValue("uri"))
                         .withAuthorization(PropertyFilesUtil.getRunValue("user"), PropertyFilesUtil.getRunValue("password"))
-                        //.withSecure(true)
                         .build());
         System.out.println("Connecting to DB: " + PropertyFilesUtil.getRunValue("uri"));
         // Check if the collection exists
@@ -70,8 +68,8 @@ public class HelloZillizVectorDB {
 
         //insert data with customized ids
         Random ran = new Random();
-        int singleNum = 1000;
-        int insertRounds = 1;
+        int singleNum = 10000;
+        int insertRounds = 600;
         long insertTotalTime = 0L;
         System.out.println("Inserting " + singleNum * insertRounds + " entities... ");
         for (int r = 0; r < insertRounds; r++) {
