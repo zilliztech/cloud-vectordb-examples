@@ -22,7 +22,7 @@ if __name__ == '__main__':
     print(f"Connecting to DB: {milvus_uri}")
 
     # Check if the collection exists
-    collection_name = "book2"
+    collection_name = "book1"
     check_collection = utility.has_collection(collection_name)
     if check_collection:
         drop_result = utility.drop_collection(collection_name)
