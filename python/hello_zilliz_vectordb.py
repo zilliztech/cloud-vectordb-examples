@@ -21,7 +21,7 @@ if __name__ == '__main__':
     print(f"Connecting to DB: {milvus_uri}")
 
     # Check if the collection exists
-    collection_name = "book33"
+    collection_name = "book3"
     check_collection = utility.has_collection(collection_name)
     if check_collection:
         drop_result = utility.drop_collection(collection_name)
@@ -42,7 +42,7 @@ if __name__ == '__main__':
 
     # insert data with customized ids
     nb = 1000
-    insert_rounds = 6000
+    insert_rounds = 8000
     start = 0  # first primary key id
     total_rt = 0  # total response time for inert
     print(f"Inserting {nb * insert_rounds} entities... ")
