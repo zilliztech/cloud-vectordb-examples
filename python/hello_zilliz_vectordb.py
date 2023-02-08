@@ -15,9 +15,9 @@ if __name__ == '__main__':
     print("begin connect....")
     connections.connect("default",
                         uri=milvus_uri,
-                        # user=user,
-                        # password=password,
-                        secure=False)
+                        user=user,
+                        password=password,
+                        secure=True)
     print(f"Connecting to DB: {milvus_uri}")
 
     # Check if the collection exists
