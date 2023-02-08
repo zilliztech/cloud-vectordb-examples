@@ -15,17 +15,17 @@ if __name__ == '__main__':
     print("begin connect....")
     connections.connect("default",
                         uri=milvus_uri,
-                        user=user,
-                        password=password,
-                        secure=True)
+                        # user=user,
+                        # password=password,
+                        secure=False)
     print(f"Connecting to DB: {milvus_uri}")
 
     # Check if the collection exists
-    collection_name = "book33"
-    check_collection = utility.has_collection(collection_name)
-    if check_collection:
-        drop_result = utility.drop_collection(collection_name)
-    print("Success!")
+    collection_name = "book1"
+    # check_collection = utility.has_collection(collection_name)
+    # if check_collection:
+    #     drop_result = utility.drop_collection(collection_name)
+    # print("Success!")
     # create a collection with customized primary field: book_id_field
     dim = 128
     book_id_field = FieldSchema(name="book_id", dtype=DataType.INT64, is_primary=True,
@@ -54,10 +54,15 @@ if __name__ == '__main__':
         t0 = time.time()
         ins_resp = collection.insert(entities)
         print(f"ins_resp:{ins_resp}")
+        time.sleep(1)
         ins_rt = time.time() - t0
         start += nb
         total_rt += ins_rt
     print(f"Succeed in {round(total_rt, 4)} seconds!")
+    # collection.load(timeout=300)
     # print(f"collection {collection_name} entities: {collection.num_entities}")
-
+    # collection = Collection(name=collection_name)
+    # resp = collection.load()
+    # print(f"resp:{resp}")
+    # print("123")
     connections.disconnect("default")
