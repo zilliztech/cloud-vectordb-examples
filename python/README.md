@@ -2,14 +2,14 @@
 
 ### Prerequisites
     Install Python 3.7+
-    pip
+    pip3
 
 
 ### Git clone the example code repo
     git clone https://github.com/zilliztech/cloud-vectordb-examples.git
 
 ### Install pymilvus
-    pip install pymilvus
+    pip3 install pymilvus
 
 ### Go to python folder
     cd cloud-vectordb-examples
@@ -21,7 +21,7 @@
     password = ********
 
 ### Run hello_milvus.py to run
-    Python hello_zilliz_vectordb.py
+    python3 hello_zilliz_vectordb.py
 
 ### It should print information on the console
     Connecting to DB: https://in01-xxxxxxxxxxxxx.aws-us-west-2.vectordb.zillizcloud.com:XXXXX
