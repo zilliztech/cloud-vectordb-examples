@@ -47,7 +47,7 @@ const test = async () => {
   console.timeEnd(`Creating example collection: ${collection_name}`);
 
   const fields_data = [];
-  Array(1000)
+  Array(100000)
     .fill(1)
     .forEach(() => {
       let r = {};
