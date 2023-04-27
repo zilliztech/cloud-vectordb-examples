@@ -5,7 +5,7 @@ const { uri, user, password, secure } = config;
 
 // connecting
 console.info(`Connecting to DB: ${uri}`);
-const client = new MilvusClient(uri, secure, user, password, secure);
+const client = new MilvusClient(uri, secure, user, password);
 console.info(`Success!`);
 
 // define schema
