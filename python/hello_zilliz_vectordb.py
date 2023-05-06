@@ -7,7 +7,7 @@ from pymilvus import Collection, DataType, FieldSchema, CollectionSchema
 
 if __name__ == '__main__':
     # connect to milvus
-    cfp = configparser.ConfigParser()
+    cfp = configparser.RawConfigParser()
     cfp.read('config.ini')
     milvus_uri = cfp.get('example', 'uri')
     user = cfp.get('example', 'user')
