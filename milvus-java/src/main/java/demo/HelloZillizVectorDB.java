@@ -25,7 +25,7 @@ public class HelloZillizVectorDB {
         final MilvusServiceClient milvusClient = new MilvusServiceClient(
                 ConnectParam.newBuilder()
                         .withUri(PropertyFilesUtil.getRunValue("uri"))
-                        .withAuthorization(PropertyFilesUtil.getRunValue("user"), PropertyFilesUtil.getRunValue("password"))
+                        .withToken(PropertyFilesUtil.getRunValue("token"))
                         .build());
         System.out.println("Connecting to DB: " + PropertyFilesUtil.getRunValue("uri"));
         // Check if the collection exists

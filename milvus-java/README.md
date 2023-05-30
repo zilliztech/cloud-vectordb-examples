@@ -12,10 +12,10 @@
     cd cloud-vectordb-examples
     cd milvus-java
 
-### Modify uri, user name and user password in configuration file.(resources/RunSettings.properties)
+### Modify uri, token in configuration file.(resources/RunSettings.properties)
     uri = https://in01-XXXXXXXXXXXX.aws-us-west-2.vectordb.zillizcloud.com:XXXXX
-    user = db_admin
-    password = ********
+    token = XXXX946dc4aa48632fd5f97a0370c8db10c3525254fcde78d67584198cb992528aa90a8533a6193a8a1a90a3b003400082f9XXXX
+*token accepts APIKey or the format of username:password*    
 
 ### Compile project
     mvn compile
