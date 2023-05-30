@@ -16,9 +16,9 @@
     cd python
 
 ### Modify uri, token in the configuration file.(config.ini)
-    uri = https://in01-xxxxxxxxxxxxx.aws-us-west-2.vectordb.zillizcloud.com:XXXXX
-    token = XXXX946dc4aa48632fd5f97a0370c8db10c3525254fcde78d67584198cb992528aa90a8533a6193a8a1a90a3b003400082f9XXXX
-*token accepts APIKey or the format of username:password*   
+    uri = https://in01-XXXXXXXXXXXX.aws-us-west-2.vectordb.zillizcloud.com:XXXXX
+    token = replace-this-with-your-token
+*The token value can be either the API key or username:password.*     
 
 ### Run hello_milvus.py to run
     python3 hello_zilliz_vectordb.py
