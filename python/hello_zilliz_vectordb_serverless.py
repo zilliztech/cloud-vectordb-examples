@@ -8,15 +8,13 @@ from pymilvus import Collection, DataType, FieldSchema, CollectionSchema
 if __name__ == '__main__':
     # connect to milvus
     cfp = configparser.RawConfigParser()
-    cfp.read('config.ini')
+    cfp.read('config_serverless.ini')
     milvus_uri = cfp.get('example', 'uri')
-    user = cfp.get('example', 'user')
-    password = cfp.get('example', 'password')
+    token = cfp.get('example', 'token')
 
     connections.connect("default",
                         uri=milvus_uri,
-                        user=user,
-                        password=password)
+                        token=token)
     print(f"Connecting to DB: {milvus_uri}")
 
     # Check if the collection exists
