@@ -96,6 +96,18 @@ public class HelloZillizVectorDB {
             insertTotalTime += (endTime - startTime) / 1000.00;
         }
         System.out.println("Succeed in " + insertTotalTime + " seconds!");
+        // flush data
+        System.out.println("Flushing...");
+        long startFlushTime = System.currentTimeMillis();
+        milvusClient.flush(FlushParam.newBuilder()
+                .withCollectionNames(Collections.singletonList(collectionName))
+                .withSyncFlush(true)
+                .withSyncFlushWaitingInterval(50L)
+                .withSyncFlushWaitingTimeout(30L)
+                .build());
+        long endFlushTime = System.currentTimeMillis();
+        System.out.println("Succeed in " + (endFlushTime - startFlushTime) / 1000.00 + " seconds!");
+
         // build index
         System.out.println("Building AutoIndex...");
         final IndexType INDEX_TYPE = IndexType.AUTOINDEX;   // IndexType
