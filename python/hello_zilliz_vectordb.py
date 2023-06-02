@@ -14,10 +14,8 @@ if __name__ == '__main__':
 
     print("begin connect....")
     connections.connect("default",
-                        uri=milvus_uri,
-                        user=user,
-                        password=password,
-                        secure=True)
+                    uri=milvus_uri,
+                    token=token)
     print(f"Connecting to DB: {milvus_uri}")
 
     # Check if the collection exists
@@ -42,7 +40,7 @@ if __name__ == '__main__':
 
     # insert data with customized ids
     nb = 10000
-    insert_rounds = 500
+    insert_rounds = 50
     start = 0  # first primary key id
     total_rt = 0  # total response time for inert
     print(f"Inserting {nb * insert_rounds} entities... ")
