@@ -20,7 +20,7 @@
     mvn compile
 
 ### Run HelloMilvus.java
-    mvn exec:java  -Dexec.mainClass="demo.HelloZillizVectorDB"
+    mvn exec:java  -Dexec.mainClass="demo.HelloZillizVectorDBServerless"
 
 ### It should print information on the console
     Connecting to DB: https://in01-XXXXXXXXXXXXX.aws-us-west-2.vectordb.zillizcloud.com
