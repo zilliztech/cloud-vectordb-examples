@@ -16,15 +16,15 @@ import util.PropertyFilesUtil;
 import java.util.*;
 
 
-public class HelloZillizVectorDB {
+public class HelloZillizVectorDBServerless {
     public static void main(String[] args) {
         // connect to milvus
         final MilvusServiceClient milvusClient = new MilvusServiceClient(
                 ConnectParam.newBuilder()
-                        .withUri(PropertyFilesUtil.getRunValue("uri"))
-                        .withAuthorization(PropertyFilesUtil.getRunValue("user"), PropertyFilesUtil.getRunValue("password"))
+                        .withUri(PropertyFilesUtil.getRunValueServerless("uri"))
+                        .withToken(PropertyFilesUtil.getRunValueServerless("token"))
                         .build());
-        System.out.println("Connecting to DB: " + PropertyFilesUtil.getRunValue("uri"));
+        System.out.println("Connecting to DB: " + PropertyFilesUtil.getRunValueServerless("uri"));
         // Check if the collection exists
         String collectionName = "book";
         R<DescribeCollectionResponse> responseR =
@@ -96,6 +96,18 @@ public class HelloZillizVectorDB {
             insertTotalTime += (endTime - startTime) / 1000.00;
         }
         System.out.println("Succeed in " + insertTotalTime + " seconds!");
+        // flush data
+        System.out.println("Flushing...");
+        long startFlushTime = System.currentTimeMillis();
+        milvusClient.flush(FlushParam.newBuilder()
+                .withCollectionNames(Collections.singletonList(collectionName))
+                .withSyncFlush(true)
+                .withSyncFlushWaitingInterval(50L)
+                .withSyncFlushWaitingTimeout(30L)
+                .build());
+        long endFlushTime = System.currentTimeMillis();
+        System.out.println("Succeed in " + (endFlushTime - startFlushTime) / 1000.00 + " seconds!");
+
         // build index
         System.out.println("Building AutoIndex...");
         final IndexType INDEX_TYPE = IndexType.AUTOINDEX;   // IndexType
