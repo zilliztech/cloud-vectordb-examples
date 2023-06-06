@@ -24,7 +24,7 @@
 };
 ```
 
-### Run HelloZillizCloud.ts
+### Run HelloZillizCloud.js
 
 ```shell
 npm install
