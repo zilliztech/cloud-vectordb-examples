@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
 	"math/rand"
 	"time"
 
@@ -11,59 +12,45 @@ import (
 )
 
 func main() {
+	collectionName := "book"
+
 	// connect to milvus
-	fmt.Println("Connecting to DB: " + uri)
-	ctx := context.Background()
-	Client, err := client.NewDefaultGrpcClientWithURI(ctx, uri, user, password)
+	fmt.Println("Connecting to DB: ", uri)
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	client, err := client.NewClient(ctx, client.Config{
+		Address:  uri,
+		Username: user,
+		Password: password,
+	})
+
 	if err != nil {
-		fmt.Println("fail to connect to milvus")
-	} else {
-		fmt.Println("Success!")
+		log.Fatal("fail to connect to milvus", err.Error())
 	}
+	fmt.Println("Success!")
 
 	// delete collection if exists
-	has, err := Client.HasCollection(ctx, "book")
+	has, err := client.HasCollection(ctx, collectionName)
 	if err != nil {
-		fmt.Println("no existing collection")
+		log.Fatal("fail to check whether collection exists", err.Error())
 	}
 	if has {
-		Client.DropCollection(ctx, "book")
+		client.DropCollection(ctx, collectionName)
 	}
 
 	// create a collection
 	fmt.Println("Creating example collection: book")
-	collectionName := "book"
-	schema := &entity.Schema{
-		CollectionName: collectionName,
-		Description:    "Medium articles published between Jan 2020 to August 2020 in prominent publications",
-		AutoID:         false,
-		Fields: []*entity.Field{
-			{
-				Name:        "book_id",
-				DataType:    entity.FieldTypeInt64,
-				PrimaryKey:  true,
-				Description: "customized primary id",
-			},
-			{
-				Name:        "word_count",
-				DataType:    entity.FieldTypeInt64,
-				Description: "word count",
-			},
-			{
-				Name:     "book_intro",
-				DataType: entity.FieldTypeFloatVector,
-				TypeParams: map[string]string{
-					entity.TypeParamDim: "128",
-				},
-			},
-		},
-	}
-	err = Client.CreateCollection(ctx, schema, entity.DefaultShardNumber)
+	schema := entity.NewSchema().WithName(collectionName).WithDescription("Medium articles published between Jan 2020 to August 2020 in prominent publications").
+		WithField(entity.NewField().WithName("book_id").WithDataType(entity.FieldTypeInt64).WithIsPrimaryKey(true).WithDescription("customized primary id")).
+		WithField(entity.NewField().WithName("word_count").WithDataType(entity.FieldTypeInt64).WithDescription("word count")).
+		WithField(entity.NewField().WithName("book_intro").WithDataType(entity.FieldTypeFloatVector).WithDim(128))
+
+	err = client.CreateCollection(ctx, schema, entity.DefaultShardNumber)
 	if err != nil {
-		fmt.Printf("Fail to create collection")
-	} else {
-		fmt.Println("Success!")
+		log.Fatal("failed to create collection", err.Error())
 	}
+	fmt.Println("Success!")
 
 	// insert data
 	fmt.Println("Inserting 100000 entities... ")
@@ -86,46 +73,40 @@ func main() {
 	vectorData := entity.NewColumnFloatVector("book_intro", dim, vectorList)
 
 	begin := time.Now()
-	_, err = Client.Insert(ctx, collectionName, "", idData, countData, vectorData)
-	end := time.Now()
+	_, err = client.Insert(ctx, collectionName, "", idData, countData, vectorData)
 	if err != nil {
-		fmt.Println("Fail to insert data")
-	} else {
-		fmt.Println("Succeed in ", end.Sub(begin))
+		log.Fatal("fail to insert data", err.Error())
 	}
+	fmt.Println("Succeed in", time.Since(begin))
 
 	// create index
 	fmt.Println("Building AutoIndex...")
 	index, err := entity.NewIndexAUTOINDEX(entity.L2)
 	if err != nil {
-		fmt.Printf("fail to get auto index")
+		log.Fatal("fail to get auto index", err.Error())
 	}
 	begin = time.Now()
-	err = Client.CreateIndex(ctx, collectionName, "book_intro", index, false)
-	end = time.Now()
+	err = client.CreateIndex(ctx, collectionName, "book_intro", index, false)
 	if err != nil {
-		fmt.Printf("fail to create index")
-	} else {
-		fmt.Println("Succeed in ", end.Sub(begin))
+		log.Fatal("fail to create index", err.Error())
 	}
+	fmt.Println("Succeed in", time.Since(begin))
 
 	// load collection
 	fmt.Println("Loading collection...")
 	begin = time.Now()
-	err = Client.LoadCollection(ctx, collectionName, false)
-	end = time.Now()
+	err = client.LoadCollection(ctx, collectionName, false)
 	if err != nil {
-		fmt.Printf("fail to load collection")
-	} else {
-		fmt.Println("Succeed in ", end.Sub(begin))
+		log.Fatal("fail to load collection", err.Error())
 	}
+	fmt.Println("Succeed in", time.Since(begin))
 
 	// search
 	sp, _ := entity.NewIndexAUTOINDEXSearchParam(1)
 	vectors := []entity.Vector{entity.FloatVector(vectorList[1])}
 	fmt.Println("Search...")
 	begin = time.Now()
-	searchResult, err := Client.Search(
+	searchResult, err := client.Search(
 		ctx,
 		collectionName,      // collectionName
 		nil,                 // partitionNames
@@ -137,12 +118,11 @@ func main() {
 		10,                  // topK
 		sp,                  // search params
 	)
-	end = time.Now()
 	if err != nil {
-		fmt.Println("search failed")
-	} else {
-		fmt.Println("Succeed in ", end.Sub(begin))
+		log.Fatal("search failed", err.Error())
 	}
+	fmt.Println("Succeed in", time.Since(begin))
+
 	for _, sr := range searchResult {
 		fmt.Println("ids: ", sr.IDs)
 		fmt.Println("Scores: ", sr.Scores)
