@@ -1,4 +1,8 @@
-import { MilvusClient, DataType } from "@zilliz/milvus2-sdk-node";
+import {
+  MilvusClient,
+  DataType,
+  ConsistencyLevelEnum,
+} from "@zilliz/milvus2-sdk-node";
 import { config } from "./config.js";
 
 const { uri, user, password, secure } = config;
@@ -47,7 +51,7 @@ const test = async () => {
   console.timeEnd(`Creating example collection: ${collection_name}`);
 
   const fields_data = [];
-  Array(100000)
+  Array(1000)
     .fill(1)
     .forEach(() => {
       let r = {};
@@ -61,12 +65,12 @@ const test = async () => {
       fields_data.push(r);
     });
   // inserting
-  console.time(`Inserting 100000 entities successfully`);
+  console.time(`Inserting 1000 entities successfully`);
   await client.insert({
     collection_name,
     fields_data,
   });
-  console.timeEnd(`Inserting 100000 entities successfully`);
+  console.timeEnd(`Inserting 1000 entities successfully`);
 
   // create index
   console.time(`Create index successfully`);
@@ -88,21 +92,17 @@ const test = async () => {
   console.timeEnd(`Load Collection successfully`);
 
   // search
-  console.time(`Searching vector:`);
   const searchVector = [...Array(dim)].map(() => Math.random());
+  console.time(`Searching vector`);
   const res = await client.search({
     collection_name,
     vectors: [searchVector],
-    search_params: {
-      anns_field: "book_intro",
-      metric_type: "L2",
-      params: JSON.stringify({ nprobe: 64 }),
-      topk: 1,
-    },
-    output_fields: ['book_id', 'word_count'],
+    output_fields: ["book_id", "word_count"],
     vector_type: DataType.FloatVector,
+    limit: 10,
+    consistency_level: ConsistencyLevelEnum.Bounded,
   });
-  console.timeEnd(`Searching vector:`);
+  console.timeEnd(`Searching vector`);
   console.log(res);
 };
 
