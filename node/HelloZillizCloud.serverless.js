@@ -1,15 +1,11 @@
-import {
-  MilvusClient,
-  DataType,
-  ConsistencyLevelEnum,
-} from "@zilliz/milvus2-sdk-node";
-import { config } from "./config.js";
+import { MilvusClient, ConsistencyLevelEnum } from "@zilliz/milvus2-sdk-node";
+import { config } from "./config.serverless.js";
 
-const { uri, user, password } = config;
+const { uri, token } = config;
 
 // connecting
 console.info(`Connecting to DB: ${uri}`);
-const client = new MilvusClient({ address: uri, token: `${user}:${password}` });
+const client = new MilvusClient({ address: uri, token: token });
 console.info(`Success!`);
 
 (async () => {
@@ -48,7 +44,6 @@ console.info(`Success!`);
     collection_name,
     vector: data[0]["vector"],
     output_fields: ["id"],
-    vector_type: DataType.FloatVector,
     limit: 10,
     consistency_level: ConsistencyLevelEnum.Bounded,
   });
