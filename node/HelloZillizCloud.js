@@ -9,7 +9,7 @@ const { uri, user, password } = config;
 
 // connecting
 console.info(`Connecting to DB: ${uri}`);
-const client = new MilvusClient({ address: uri, token: `${user}:${password}` });
+const client = new MilvusClient({ address: uri, username: user, password: password });
 console.info(`Success!`);
 
 (async () => {
