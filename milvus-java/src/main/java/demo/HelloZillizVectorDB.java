@@ -34,7 +34,7 @@ public class HelloZillizVectorDB {
         }
         System.out.println("Success!");
         // create a collection with customized primary field: book_id_field
-        int dim = 128;
+        int dim = 64;
         FieldType bookIdField = FieldType.newBuilder()
                 .withName("book_id")
                 .withDataType(DataType.Int64)
@@ -65,8 +65,8 @@ public class HelloZillizVectorDB {
 
         //insert data with customized ids
         Random ran = new Random();
-        int singleNum = 10000;
-        int insertRounds = 10;
+        int singleNum = 1000;
+        int insertRounds = 2;
         long insertTotalTime = 0L;
         System.out.println("Inserting " + singleNum * insertRounds + " entities... ");
         for (int r = 0; r < insertRounds; r++) {

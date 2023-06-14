@@ -24,7 +24,7 @@ if __name__ == '__main__':
         drop_result = utility.drop_collection(collection_name)
     print("Success!")
     # create a collection with customized primary field: book_id_field
-    dim = 128
+    dim = 64
     book_id_field = FieldSchema(name="book_id", dtype=DataType.INT64, is_primary=True, description="customized primary id")
     word_count_field = FieldSchema(name="word_count", dtype=DataType.INT64, description="word count")
     book_intro_field = FieldSchema(name="book_intro", dtype=DataType.FLOAT_VECTOR, dim=dim)
@@ -37,8 +37,8 @@ if __name__ == '__main__':
     print("Success!")
 
     # insert data with customized ids
-    nb = 10000
-    insert_rounds = 10
+    nb = 1000
+    insert_rounds = 2
     start = 0           # first primary key id
     total_rt = 0        # total response time for inert
     print(f"Inserting {nb * insert_rounds} entities... ")

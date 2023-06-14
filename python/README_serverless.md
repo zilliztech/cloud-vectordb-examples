@@ -23,13 +23,13 @@
     python3 hello_zilliz_vectordb_serverless.py
 
 ### It should print information on the console
-    Connecting to DB: https://in01-xxxxxxxxxxxxx.aws-us-west-2.vectordb.zillizcloud.com:XXXXX
+    Connecting to DB: https://in01-xxxxxxxxxxxxx.aws-us-west-2.vectordb.zillizcloud.com
     Success!
     Creating example collection: book
     Schema: {...}
     Success!
-    Inserting 100000 entities... 
-    Succeed in 6.0288 seconds!
+    Inserting 2000 entities... 
+    Succeed in 0.3021 seconds!
     Flushing...
     Succeed in 0.77 seconds!
     Building AutoIndex...
