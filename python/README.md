@@ -9,7 +9,7 @@
     git clone https://github.com/zilliztech/cloud-vectordb-examples.git
 
 ### Install pymilvus
-    pip3 install pymilvus
+    pip3 install pymilvus==2.2.11
 
 ### Go to python folder
     cd cloud-vectordb-examples
@@ -17,8 +17,7 @@
 
 ### Modify uri,username and password in the configuration file.(config.ini)
     uri = https://in01-XXXXXXXXXXXX.aws-us-west-2.vectordb.zillizcloud.com:XXXXX
-    user = db_admin
-    password = ********
+    token = userName:password
 
 ### Run hello_milvus.py to run
     python3 hello_zilliz_vectordb.py
