@@ -4,12 +4,24 @@ import {
   ConsistencyLevelEnum,
 } from "@zilliz/milvus2-sdk-node";
 import { config } from "./config.js";
+import { isVersionAtLeast } from "./utils.js";
+
+if (!isVersionAtLeast(MilvusClient.sdkInfo.version, "2.2.17")) {
+  console.warn(
+    `Please upgrade your node sdk version, it should >= 2.2.17, your sdk version is ${MilvusClient.sdkInfo.version}`
+  );
+  process.exit();
+}
 
 const { uri, user, password } = config;
 
 // connecting
 console.info(`Connecting to DB: ${uri}`);
-const client = new MilvusClient({ address: uri, username: user, password: password });
+const client = new MilvusClient({
+  address: uri,
+  username: user,
+  password: password,
+});
 console.info(`Success!`);
 
 (async () => {

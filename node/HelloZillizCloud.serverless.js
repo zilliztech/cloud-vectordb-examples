@@ -1,5 +1,13 @@
 import { MilvusClient, ConsistencyLevelEnum } from "@zilliz/milvus2-sdk-node";
 import { config } from "./config.serverless.js";
+import { isVersionAtLeast } from "./utils.js";
+
+if (!isVersionAtLeast(MilvusClient.sdkInfo.version, "2.2.17")) {
+  console.warn(
+    `Please upgrade your node sdk version, it should >= 2.2.17, your version is ${MilvusClient.sdkInfo.version}`
+  );
+  process.exit();
+}
 
 const { uri, token } = config;
 
