@@ -19,7 +19,7 @@
 ### Compile project
     mvn compile
 
-### Run HelloMilvus.java
+### Run HelloZillizVectorDBServerless.java
     mvn exec:java  -Dexec.mainClass="demo.HelloZillizVectorDBServerless"
 
 ### It should print information on the console
