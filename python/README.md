@@ -19,7 +19,7 @@
     uri = https://in01-XXXXXXXXXXXX.aws-us-west-2.vectordb.zillizcloud.com:XXXXX
     token = userName:password
 
-### Run hello_milvus.py to run
+### Run hello_zilliz_vectordb.py
     python3 hello_zilliz_vectordb.py
 
 ### It should print information on the console
