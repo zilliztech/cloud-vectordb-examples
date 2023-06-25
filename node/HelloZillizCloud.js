@@ -13,7 +13,7 @@ if (!isVersionAtLeast(MilvusClient.sdkInfo.version, "2.2.17")) {
   process.exit();
 }
 
-const { uri, user, password } = config;
+const { uri, user, password，token } = config;
 
 // connecting
 console.info(`Connecting to DB: ${uri}`);
@@ -22,6 +22,15 @@ const client = new MilvusClient({
   username: user,
   password: password,
 });
+
+/* 
+  Please check your connection guide in Zilliz Cloud console, if the cluster provides a token, you can use it to authenticate your cluster\
+// token based cluster
+const client = new MilvusClient({
+  address: uri,
+  token: token,
+});
+*/
 console.info(`Success!`);
 
 (async () => {
