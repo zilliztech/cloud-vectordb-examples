@@ -17,7 +17,8 @@
 
 ### Modify uri,username and password in the configuration file.(config.ini)
     uri = https://in01-XXXXXXXXXXXX.aws-us-west-2.vectordb.zillizcloud.com:XXXXX
-    token = userName:password
+    user = db_admin
+    password = ********
 
 ### Run hello_zilliz_vectordb.py
     python3 hello_zilliz_vectordb.py
