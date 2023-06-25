@@ -10,11 +10,18 @@ if __name__ == '__main__':
     cfp = configparser.RawConfigParser()
     cfp.read('config.ini')
     milvus_uri = cfp.get('example', 'uri')
-    token = cfp.get('example', 'token')
-
+    user = cfp.get('example', 'user')
+    password = cfp.get('example', 'password')
     connections.connect("default",
                         uri=milvus_uri,
-                        token=token)
+                        user=user,
+                        password=password)
+    # # Please check your connection guide in Zilliz Cloud console, if the cluster provides a token, you can use it to authenticate your cluster
+    # # token based cluster
+    # token = cfp.get('example', 'token')
+    # connections.connect("default",
+    #                     uri=milvus_uri,
+    #                     token=token)
     print(f"Connecting to DB: {milvus_uri}")
 
     # Check if the collection exists
