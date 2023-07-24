@@ -1,5 +1,6 @@
 ## Getting started
-
+The example shows how to connect to Zilliz Cloud, create a collection with customized primary field, build
+index, load collection and query a vector to get the most similar entities.
 ### Prerequisites
 
     Java 8+
@@ -10,20 +11,21 @@
 
 ### Go to milvus-java folder
     cd cloud-vectordb-examples
-    cd milvus-java
+    cd java
 
-### Modify uri, token in configuration file.(resources/RunSettingsServerless.properties)
-    uri = https://in01-XXXXXXXXXXXX.aws-us-west-2.vectordb.zillizcloud.com
-    token = replace-this-with-your-token
+### Modify uri, token or user/password
+    uri = https://in01-XXXXXXXXXXXX.aws-us-west-2.vectordb.zillizcloud.com:XXXXX
+    user = db_admin
+    password = ********   
 
 ### Compile project
     mvn compile
 
-### Run HelloZillizVectorDBServerless.java
-    mvn exec:java  -Dexec.mainClass="demo.HelloZillizVectorDBServerless"
+### Run HelloZilliz.java
+    mvn exec:java  -Dexec.mainClass="demo.HelloZilliz"
 
 ### It should print information on the console
-    Connecting to DB: https://in01-XXXXXXXXXXXXX.aws-us-west-2.vectordb.zillizcloud.com
+    Connecting to Zilliz Cluster: https://in01-XXXXXXXXXXXXX.aws-us-west-2.vectordb.zillizcloud.com:XXXXX
     Success!
     Creating example collection: book
     Schema: {...}
@@ -37,11 +39,6 @@
     Loading collection...
     Succeed in 1.718 seconds!
     Searching vector:[[...][...]...]
-    search 0 latency: 0.0154 seconds!
-    Searching vector:[[...][...]...]
-    search 1 latency: 0.0147 seconds!
-    Searching vector:[[...][...]...]
-    search 2 latency: 0.0151 seconds!
-    ...
-    ...
+    Result:[...]
+    latency: 0.0154 seconds!
   
