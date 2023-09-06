@@ -24,7 +24,7 @@ if __name__ == '__main__':
     #     drop_result = utility.drop_collection(collection_name)
     # print("Success!")
     # create a collection with customized primary field: book_id_field
-    dim = 128
+    dim = 768
     book_id_field = FieldSchema(name="book_id", dtype=DataType.INT64, is_primary=True,
                                 description="customized primary id")
     word_count_field = FieldSchema(name="word_count", dtype=DataType.INT64, description="word count")
