@@ -13,7 +13,7 @@ if (!isVersionAtLeast(MilvusClient.sdkInfo.version, "2.2.17")) {
   process.exit();
 }
 
-const { uri, user, password，token } = config;
+const { uri, user, password, token } = config;
 
 // connecting
 console.info(`Connecting to DB: ${uri}`);
