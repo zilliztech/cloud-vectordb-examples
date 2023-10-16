@@ -6,7 +6,7 @@ import {
 import { config } from "./config.js";
 import { isVersionAtLeast } from "./utils.js";
 
-if (!isVersionAtLeast(MilvusClient.sdkInfo.version, "2.2.17")) {
+if (!isVersionAtLeast("2.2.17", MilvusClient.sdkInfo.version)) {
   console.warn(
     `Please upgrade your node sdk version, it should >= 2.2.17, your sdk version is ${MilvusClient.sdkInfo.version}`
   );
