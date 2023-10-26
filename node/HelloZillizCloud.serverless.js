@@ -24,6 +24,7 @@ console.info(`Success!`);
   const dimension = 64;
   const collection_name = "hello_milvus";
   const num_of_rows = 1000;
+
   // create colleciton
   console.time(`Creating example collection: ${collection_name}`);
   await client.createCollection({
@@ -49,6 +50,9 @@ console.info(`Success!`);
   });
   console.timeEnd(`Inserting 1000 entities successfully`);
 
+  // flush
+  await client.flushSync({ collection_names: [collection_name] });
+  console.log(`Flush data successfully`);
   // search
   console.time(`Searching vector`);
   const res = await client.search({

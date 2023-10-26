@@ -31,7 +31,6 @@ const client = new MilvusClient({
   token: token,
 });
 */
-console.info(`Success!`);
 
 (async () => {
   // dimension
@@ -44,6 +43,7 @@ console.info(`Success!`);
     collection_name,
     dimension,
   });
+  console.info(`Success!`);
   console.timeEnd(`Creating example collection: ${collection_name}`);
 
   const data = [];
@@ -62,6 +62,9 @@ console.info(`Success!`);
     data,
   });
   console.timeEnd(`Inserting 1000 entities successfully`);
+
+  await client.flushSync({ collection_names: [collection_name] });
+  console.log(`Flush data successfully`);
 
   // search
   console.time(`Searching vector`);
