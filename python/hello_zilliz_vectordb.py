@@ -26,15 +26,16 @@ if __name__ == '__main__':
 
     # Check if the collection exists
     collection_name = "book"
-    start_has = time.time()
-    check_collection = utility.has_collection(collection_name)
-    end_has = time.time()
-    print(f"has collection use {round(end_has - start_has, 4)} seconds!")
+    for i in range(50):
+        start_has = time.time()
+        check_collection = utility.has_collection(collection_name)
+        end_has = time.time()
+        print(f"has collection use {round(end_has - start_has, 4)} seconds!")
     if check_collection:
         drop_result = utility.drop_collection(collection_name)
     print("Success!")
     # create a collection with customized primary field: book_id_field
-    dim = 64
+    dim = 768
     book_id_field = FieldSchema(name="book_id", dtype=DataType.INT64, is_primary=True, description="customized primary id")
     word_count_field = FieldSchema(name="word_count", dtype=DataType.INT64, description="word count")
     book_intro_field = FieldSchema(name="book_intro", dtype=DataType.FLOAT_VECTOR, dim=dim)
@@ -48,7 +49,7 @@ if __name__ == '__main__':
 
     # insert data with customized ids
     nb = 1000
-    insert_rounds = 2
+    insert_rounds = 10
     start = 0           # first primary key id
     total_rt = 0        # total response time for inert
     print(f"Inserting {nb * insert_rounds} entities... ")
@@ -90,7 +91,7 @@ if __name__ == '__main__':
     nq = 1
     search_params = {"metric_type": "L2",  "params": {"level": 2}}
     topk = 1
-    for i in range(10):
+    for i in range(50):
         search_vec = [[random.random() for _ in range(dim)] for _ in range(nq)]
         # print(f"Searching vector: {search_vec}")
         t0 = time.time()
