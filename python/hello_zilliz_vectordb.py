@@ -26,7 +26,10 @@ if __name__ == '__main__':
 
     # Check if the collection exists
     collection_name = "book"
+    start_has = time.time()
     check_collection = utility.has_collection(collection_name)
+    end_has = time.time()
+    print(f"has collection use {round(end_has - start_has, 4)} seconds!")
     if check_collection:
         drop_result = utility.drop_collection(collection_name)
     print("Success!")
@@ -89,7 +92,7 @@ if __name__ == '__main__':
     topk = 1
     for i in range(10):
         search_vec = [[random.random() for _ in range(dim)] for _ in range(nq)]
-        print(f"Searching vector: {search_vec}")
+        # print(f"Searching vector: {search_vec}")
         t0 = time.time()
         results = collection.search(search_vec,
                                 anns_field=book_intro_field.name,
@@ -97,7 +100,7 @@ if __name__ == '__main__':
                                 limit=topk,
                                 guarantee_timestamp=1)
         t1 = time.time()
-        print(f"Result:{results}")
+        # print(f"Result:{results}")
         print(f"search {i} latency: {round(t1-t0, 4)} seconds!")
 
     connections.disconnect("default")
