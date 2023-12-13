@@ -3,7 +3,7 @@ import time
 import random
 from pymilvus import connections, utility
 from pymilvus import Collection, DataType, FieldSchema, CollectionSchema
-
+import numpy as np
 
 if __name__ == '__main__':
     # connect to milvus
@@ -26,15 +26,22 @@ if __name__ == '__main__':
 
     # Check if the collection exists
     collection_name = "book"
-    start_has = time.time()
-    check_collection = utility.has_collection(collection_name)
-    end_has = time.time()
-    print(f"has collection use {round(end_has - start_has, 4)} seconds!")
-    if check_collection:
-        drop_result = utility.drop_collection(collection_name)
-    print("Success!")
+    has_col_time=[]
+    for i in range(50):
+        start_has = time.time()*1000
+        check_collection = utility.has_collection(collection_name)
+        end_has = time.time()*1000
+        print(f"has collection use {round(end_has - start_has, 2)} ms!")
+        has_col_time.append(round(end_has - start_has, 4))
+        if check_collection:
+            drop_result = utility.drop_collection(collection_name)
+            print("Success!")
+    n_has_col_time=np.array(has_col_time)
+    print(f"has collection :TP99 {round(np.percentile(n_has_col_time, 99),2)} ms,"
+          f"TP50 {round(np.percentile(n_has_col_time, 50),2)} ms,"
+          f"AVG {round(np.mean(n_has_col_time),2)} ms")
     # create a collection with customized primary field: book_id_field
-    dim = 64
+    dim = 768
     book_id_field = FieldSchema(name="book_id", dtype=DataType.INT64, is_primary=True, description="customized primary id")
     word_count_field = FieldSchema(name="word_count", dtype=DataType.INT64, description="word count")
     book_intro_field = FieldSchema(name="book_intro", dtype=DataType.FLOAT_VECTOR, dim=dim)
@@ -48,7 +55,7 @@ if __name__ == '__main__':
 
     # insert data with customized ids
     nb = 1000
-    insert_rounds = 2
+    insert_rounds = 10
     start = 0           # first primary key id
     total_rt = 0        # total response time for inert
     print(f"Inserting {nb * insert_rounds} entities... ")
@@ -90,18 +97,26 @@ if __name__ == '__main__':
     nq = 1
     search_params = {"metric_type": "L2",  "params": {"level": 2}}
     topk = 1
-    for i in range(10):
+    search_time=[]
+    for i in range(50):
         search_vec = [[random.random() for _ in range(dim)] for _ in range(nq)]
         # print(f"Searching vector: {search_vec}")
-        t0 = time.time()
+        t0 = time.time()*1000
         results = collection.search(search_vec,
                                 anns_field=book_intro_field.name,
                                 param=search_params,
                                 limit=topk,
                                 guarantee_timestamp=1)
-        t1 = time.time()
+        t1 = time.time()*1000
         # print(f"Result:{results}")
-        print(f"search {i} latency: {round(t1-t0, 4)} seconds!")
-
+        print(f"search {i} latency: {round(t1-t0, 2)} ms!")
+        search_time.append(round(t1-t0, 2))
+    n_search_time=np.array(search_time)
+    print(f"has collection :TP99 {round(np.percentile(n_has_col_time, 99), 2)} ms,"
+          f"TP50 {round(np.percentile(n_has_col_time, 50), 2)} ms,"
+          f"AVG {round(np.mean(n_has_col_time), 2)} ms")
+    print(f"search latency :TP99 {round(np.percentile(n_search_time, 99), 2)} ms,"
+          f"TP50 {round(np.percentile(n_search_time, 50), 2)} ms,"
+          f"AVG {round(np.mean(n_search_time), 2)} ms")
     connections.disconnect("default")
 
