@@ -13,6 +13,9 @@ import (
 
 func main() {
 	collectionName := "book"
+	uri := "" // https://in01-xxxx.region.zillizcloud.com:port
+	user := "username"
+	password := "password"
 
 	// connect to milvus
 	fmt.Println("Connecting to DB: ", uri)
