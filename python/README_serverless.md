@@ -15,16 +15,15 @@
     cd cloud-vectordb-examples
     cd python
 
-### Modify uri,username and password in the configuration file.(config.ini)
-    uri = https://in01-XXXXXXXXXXXX.aws-us-west-2.vectordb.zillizcloud.com:XXXXX
-    user = db_admin
-    password = ********
+### Modify uri, token in the configuration file.(config_serverless.ini)
+    uri = https://in01-XXXXXXXXXXXX.aws-us-west-2.vectordb.zillizcloud.com
+    token = replace-this-with-your-token
 
-### Run hello_zilliz_vectordb.py
-    python3 hello_zilliz_vectordb.py
+### Run hello_zilliz_vectordb_serverless.py
+    python3 hello_zilliz_vectordb_serverless.py
 
 ### It should print information on the console
-    Connecting to DB: https://in01-xxxxxxxxxxxxx.aws-us-west-2.vectordb.zillizcloud.com:XXXXX
+    Connecting to DB: https://in01-xxxxxxxxxxxxx.aws-us-west-2.vectordb.zillizcloud.com
     Success!
     Creating example collection: book
     Schema: {...}
