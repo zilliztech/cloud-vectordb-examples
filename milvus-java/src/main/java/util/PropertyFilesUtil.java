@@ -31,11 +31,4 @@ public class PropertyFilesUtil {
         value=hashMap.get(key);
         return value;
     }
-
-    public static String getRunValueServerless(String key){
-        HashMap<String, String> hashMap = PropertyFilesUtil.readPropertyFile("./src/main/resources/RunSettingsServerless.properties");
-        String value;
-        value=hashMap.get(key);
-        return value;
-    }
 }
