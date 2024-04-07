@@ -12,19 +12,18 @@
     cd cloud-vectordb-examples
     cd milvus-java
 
-### Modify uri, token in configuration file.(resources/RunSettings.properties)
-    uri = https://in01-XXXXXXXXXXXX.aws-us-west-2.vectordb.zillizcloud.com:XXXXX
-    user = db_admin
-    password = ********   
+### Modify uri, token in configuration file.(resources/RunSettingsServerless.properties)
+    uri = https://in01-XXXXXXXXXXXX.aws-us-west-2.vectordb.zillizcloud.com
+    token = replace-this-with-your-token
 
 ### Compile project
     mvn compile
 
-### Run HelloZillizVectorDB.java
-    mvn exec:java  -Dexec.mainClass="demo.HelloZillizVectorDB"
+### Run HelloZillizVectorDBServerless.java
+    mvn exec:java  -Dexec.mainClass="demo.HelloZillizVectorDBServerless"
 
 ### It should print information on the console
-    Connecting to DB: https://in01-XXXXXXXXXXXXX.aws-us-west-2.vectordb.zillizcloud.com:XXXXX
+    Connecting to DB: https://in01-XXXXXXXXXXXXX.aws-us-west-2.vectordb.zillizcloud.com
     Success!
     Creating example collection: book
     Schema: {...}

@@ -16,24 +16,15 @@ import util.PropertyFilesUtil;
 import java.util.*;
 
 
-public class HelloZillizVectorDB {
+public class HelloZillizVectorDBServerless {
     public static void main(String[] args) {
         // connect to milvus
         final MilvusServiceClient milvusClient = new MilvusServiceClient(
                 ConnectParam.newBuilder()
-                        .withUri(PropertyFilesUtil.getRunValue("uri"))
-                        .withAuthorization(PropertyFilesUtil.getRunValue("user"), PropertyFilesUtil.getRunValue("password"))
+                        .withUri(PropertyFilesUtil.getRunValueServerless("uri"))
+                        .withToken(PropertyFilesUtil.getRunValueServerless("token"))
                         .build());
-/*
-        // Please check your connection guide in Zilliz Cloud console, if the cluster provides a token, you can use it to authenticate your cluster
-        // token based cluster
-        final MilvusServiceClient milvusClient = new MilvusServiceClient(
-                ConnectParam.newBuilder()
-                        .withUri(PropertyFilesUtil.getRunValue("uri"))
-                        .withToken(PropertyFilesUtil.getRunValue("token"))
-                        .build());
-*/
-        System.out.println("Connecting to DB: " + PropertyFilesUtil.getRunValue("uri"));
+        System.out.println("Connecting to DB: " + PropertyFilesUtil.getRunValueServerless("uri"));
         // Check if the collection exists
         String collectionName = "book";
         R<DescribeCollectionResponse> responseR =
