@@ -8,20 +8,13 @@ from pymilvus import Collection, DataType, FieldSchema, CollectionSchema
 if __name__ == '__main__':
     # connect to milvus
     cfp = configparser.RawConfigParser()
-    cfp.read('config.ini')
+    cfp.read('config_serverless.ini')
     milvus_uri = cfp.get('example', 'uri')
-    user = cfp.get('example', 'user')
-    password = cfp.get('example', 'password')
+    token = cfp.get('example', 'token')
+
     connections.connect("default",
                         uri=milvus_uri,
-                        user=user,
-                        password=password)
-    # # Please check your connection guide in Zilliz Cloud console, if the cluster provides a token, you can use it to authenticate your cluster
-    # # token based cluster
-    # token = cfp.get('example', 'token')
-    # connections.connect("default",
-    #                     uri=milvus_uri,
-    #                     token=token)
+                        token=token)
     print(f"Connecting to DB: {milvus_uri}")
 
     # Check if the collection exists
