@@ -14,8 +14,7 @@
 
 ### Modify uri, token in configuration file.(resources/RunSettings.properties)
     uri = https://in01-XXXXXXXXXXXX.aws-us-west-2.vectordb.zillizcloud.com:XXXXX
-    user = db_admin
-    password = ********   
+    token =  db_admin:password (or ApiKey)
 
 ### Compile project
     mvn compile
