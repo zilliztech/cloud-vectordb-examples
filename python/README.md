@@ -15,10 +15,9 @@
     cd cloud-vectordb-examples
     cd python
 
-### Modify uri,username and password in the configuration file.(config.ini)
+### Modify uri,token in the configuration file.(config.ini)
     uri = https://in01-XXXXXXXXXXXX.aws-us-west-2.vectordb.zillizcloud.com:XXXXX
-    user = db_admin
-    password = ********
+    token = db_admin:password (or ApiKey)
 
 ### Run hello_zilliz_vectordb.py
     python3 hello_zilliz_vectordb.py
