@@ -22,17 +22,8 @@ public class HelloZillizVectorDB {
         final MilvusServiceClient milvusClient = new MilvusServiceClient(
                 ConnectParam.newBuilder()
                         .withUri(PropertyFilesUtil.getRunValue("uri"))
-                        .withAuthorization(PropertyFilesUtil.getRunValue("user"), PropertyFilesUtil.getRunValue("password"))
-                        .build());
-/*
-        // Please check your connection guide in Zilliz Cloud console, if the cluster provides a token, you can use it to authenticate your cluster
-        // token based cluster
-        final MilvusServiceClient milvusClient = new MilvusServiceClient(
-                ConnectParam.newBuilder()
-                        .withUri(PropertyFilesUtil.getRunValue("uri"))
                         .withToken(PropertyFilesUtil.getRunValue("token"))
                         .build());
-*/
         System.out.println("Connecting to DB: " + PropertyFilesUtil.getRunValue("uri"));
         // Check if the collection exists
         String collectionName = "book";
