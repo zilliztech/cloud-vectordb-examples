@@ -21,6 +21,7 @@ const client = new MilvusClient({
   address: uri,
   username: user,
   password: password,
+  token,
 });
 
 /* 
