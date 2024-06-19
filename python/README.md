@@ -1,7 +1,7 @@
 ## Getting started
 
 ### Prerequisites
-    Install Python 3.7+
+    Install Python 3.8+
     pip3
 
 
