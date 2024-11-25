@@ -1,16 +1,25 @@
 package demo;
 
 
-import io.milvus.client.MilvusServiceClient;
-import io.milvus.grpc.DataType;
-import io.milvus.grpc.DescribeCollectionResponse;
-import io.milvus.grpc.MutationResult;
-import io.milvus.grpc.SearchResults;
-import io.milvus.param.*;
-import io.milvus.param.collection.*;
-import io.milvus.param.dml.InsertParam;
-import io.milvus.param.dml.SearchParam;
-import io.milvus.param.index.CreateIndexParam;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import io.milvus.v2.client.ConnectConfig;
+import io.milvus.v2.client.MilvusClientV2;
+import io.milvus.v2.common.ConsistencyLevel;
+import io.milvus.v2.common.IndexParam;
+import io.milvus.v2.service.collection.request.CreateCollectionReq;
+import io.milvus.v2.service.collection.request.DescribeCollectionReq;
+import io.milvus.v2.service.collection.request.DropCollectionReq;
+import io.milvus.v2.service.collection.request.LoadCollectionReq;
+import io.milvus.v2.service.collection.response.DescribeCollectionResp;
+import io.milvus.v2.service.index.request.CreateIndexReq;
+import io.milvus.v2.service.utility.request.FlushReq;
+import io.milvus.v2.service.vector.request.InsertReq;
+import io.milvus.v2.service.vector.request.SearchReq;
+import io.milvus.v2.service.vector.request.data.BaseVector;
+import io.milvus.v2.service.vector.request.data.FloatVec;
+import io.milvus.v2.service.vector.response.InsertResp;
+import io.milvus.v2.service.vector.response.SearchResp;
 import util.PropertyFilesUtil;
 
 import java.util.*;
@@ -19,152 +28,156 @@ import java.util.*;
 public class HelloZillizVectorDB {
     public static void main(String[] args) {
         // connect to milvus
-        final MilvusServiceClient milvusClient = new MilvusServiceClient(
-                ConnectParam.newBuilder()
-                        .withUri(PropertyFilesUtil.getRunValue("uri"))
-                        .withToken(PropertyFilesUtil.getRunValue("token"))
-                        .build());
+        final MilvusClientV2 milvusClientV2 = new MilvusClientV2(ConnectConfig.builder()
+                .uri(PropertyFilesUtil.getRunValue("uri"))
+                .token(PropertyFilesUtil.getRunValue("token"))
+                .secure(false)
+                .connectTimeoutMs(5000L)
+                .build());
         System.out.println("Connecting to DB: " + PropertyFilesUtil.getRunValue("uri"));
         // Check if the collection exists
         String collectionName = "book";
-        R<DescribeCollectionResponse> responseR =
-                milvusClient.describeCollection(DescribeCollectionParam.newBuilder().withCollectionName(collectionName).build());
-        if (responseR.getData() != null) {
-            milvusClient.dropCollection(DropCollectionParam.newBuilder().withCollectionName(collectionName).build());
+        DescribeCollectionResp describeCollectionResp = null;
+        try {
+            describeCollectionResp = milvusClientV2.describeCollection(DescribeCollectionReq.builder().collectionName(collectionName).build());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        if (describeCollectionResp != null) {
+            milvusClientV2.dropCollection(DropCollectionReq.builder().collectionName(collectionName).build());
         }
         System.out.println("Success!");
-        // create a collection with customized primary field: book_id_field
+
+        // create a collection with customized primary field: book_id
         int dim = 64;
-        FieldType bookIdField = FieldType.newBuilder()
-                .withName("book_id")
-                .withDataType(DataType.Int64)
-                .withPrimaryKey(true)
-                .withAutoID(false)
+        CreateCollectionReq.FieldSchema bookIdField = CreateCollectionReq.FieldSchema.builder()
+                .autoID(false)
+                .dataType(io.milvus.v2.common.DataType.Int64)
+                .isPrimaryKey(true)
+                .name("book_id")
                 .build();
-        FieldType wordCountField = FieldType.newBuilder()
-                .withName("word_count")
-                .withDataType(DataType.Int64)
+        CreateCollectionReq.FieldSchema wordCountField = CreateCollectionReq.FieldSchema.builder()
+                .dataType(io.milvus.v2.common.DataType.Int64)
+                .name("word_count")
+                .isPrimaryKey(false)
                 .build();
-        FieldType bookIntroField = FieldType.newBuilder()
-                .withName("book_intro")
-                .withDataType(DataType.FloatVector)
-                .withDimension(dim)
+        CreateCollectionReq.FieldSchema bookIntroField = CreateCollectionReq.FieldSchema.builder()
+                .dataType(io.milvus.v2.common.DataType.FloatVector)
+                .name("book_intro")
+                .isPrimaryKey(false)
+                .dimension(dim)
                 .build();
-        CreateCollectionParam createCollectionParam = CreateCollectionParam.newBuilder()
-                .withCollectionName(collectionName)
-                .withDescription("my first collection")
-                .withShardsNum(2)
-                .addFieldType(bookIdField)
-                .addFieldType(wordCountField)
-                .addFieldType(bookIntroField)
+        List<CreateCollectionReq.FieldSchema> fieldSchemaList = new ArrayList<>();
+        fieldSchemaList.add(bookIdField);
+        fieldSchemaList.add(wordCountField);
+        fieldSchemaList.add(bookIntroField);
+        CreateCollectionReq.CollectionSchema collectionSchema = CreateCollectionReq.CollectionSchema.builder()
+                .fieldSchemaList(fieldSchemaList)
                 .build();
         System.out.println("Creating example collection: " + collectionName);
-        System.out.println("Schema: " + createCollectionParam);
-        milvusClient.createCollection(createCollectionParam);
+        System.out.println("Schema: " + collectionSchema);
+        CreateCollectionReq createCollectionReq = CreateCollectionReq.builder()
+                .collectionSchema(collectionSchema)
+                .collectionName(collectionName)
+                .enableDynamicField(false)
+                .description("create collection demo")
+                .numShards(1)
+                .build();
+        milvusClientV2.createCollection(createCollectionReq);
         System.out.println("Success!");
 
         //insert data with customized ids
         Random ran = new Random();
+        Gson gson = new Gson();
         int singleNum = 1000;
         int insertRounds = 2;
         long insertTotalTime = 0L;
         System.out.println("Inserting " + singleNum * insertRounds + " entities... ");
         for (int r = 0; r < insertRounds; r++) {
-            List<Long> book_id_array = new ArrayList<>();
-            List<Long> word_count_array = new ArrayList<>();
-            List<List<Float>> book_intro_array = new ArrayList<>();
+            List<JsonObject> jsonList = new ArrayList<>();
             for (long i = r * singleNum; i < (r + 1) * singleNum; ++i) {
-                book_id_array.add(i);
-                word_count_array.add(i + 10000);
+                JsonObject row = new JsonObject();
+                row.addProperty(bookIdField.getName(), i);
+                row.addProperty(wordCountField.getName(), i + 10000);
                 List<Float> vector = new ArrayList<>();
                 for (int k = 0; k < dim; ++k) {
                     vector.add(ran.nextFloat());
                 }
-                book_intro_array.add(vector);
+                row.add(bookIntroField.getName(), gson.toJsonTree(vector));
+                jsonList.add(row);
             }
-            List<InsertParam.Field> fields = new ArrayList<>();
-            fields.add(new InsertParam.Field(bookIdField.getName(), book_id_array));
-            fields.add(new InsertParam.Field(wordCountField.getName(), word_count_array));
-            fields.add(new InsertParam.Field(bookIntroField.getName(), book_intro_array));
-            InsertParam insertParam = InsertParam.newBuilder()
-                    .withCollectionName(collectionName)
-                    .withFields(fields)
-                    .build();
             long startTime = System.currentTimeMillis();
-            R<MutationResult> insertR = milvusClient.insert(insertParam);
+            InsertResp insert = milvusClientV2.insert(InsertReq.builder()
+                    .collectionName(collectionName)
+                    .data(jsonList).build());
             long endTime = System.currentTimeMillis();
             insertTotalTime += (endTime - startTime) / 1000.00;
         }
         System.out.println("Succeed in " + insertTotalTime + " seconds!");
+
         // flush data
         System.out.println("Flushing...");
         long startFlushTime = System.currentTimeMillis();
-        milvusClient.flush(FlushParam.newBuilder()
-                .withCollectionNames(Collections.singletonList(collectionName))
-                .withSyncFlush(true)
-                .withSyncFlushWaitingInterval(50L)
-                .withSyncFlushWaitingTimeout(30L)
-                .build());
+        milvusClientV2.flush(FlushReq.builder().collectionNames(Collections.singletonList(collectionName)).build());
         long endFlushTime = System.currentTimeMillis();
         System.out.println("Succeed in " + (endFlushTime - startFlushTime) / 1000.00 + " seconds!");
 
         // build index
         System.out.println("Building AutoIndex...");
-        final IndexType INDEX_TYPE = IndexType.AUTOINDEX;   // IndexType
+        IndexParam indexParam = IndexParam.builder()
+                .fieldName(bookIntroField.getName())
+                .indexType(IndexParam.IndexType.AUTOINDEX)
+                .metricType(IndexParam.MetricType.L2)
+                .build();
         long startIndexTime = System.currentTimeMillis();
-        R<RpcStatus> indexR = milvusClient.createIndex(
-                CreateIndexParam.newBuilder()
-                        .withCollectionName(collectionName)
-                        .withFieldName(bookIntroField.getName())
-                        .withIndexType(INDEX_TYPE)
-                        .withMetricType(MetricType.L2)
-                        .withSyncMode(Boolean.TRUE)
-                        .withSyncWaitingInterval(500L)
-                        .withSyncWaitingTimeout(30L)
-                        .build());
+        milvusClientV2.createIndex(CreateIndexReq.builder()
+                .collectionName(collectionName)
+                .indexParams(Collections.singletonList(indexParam))
+                .build());
         long endIndexTime = System.currentTimeMillis();
         System.out.println("Succeed in " + (endIndexTime - startIndexTime) / 1000.00 + " seconds!");
 
         // load collection
         System.out.println("Loading collection...");
         long startLoadTime = System.currentTimeMillis();
-        milvusClient.loadCollection(LoadCollectionParam.newBuilder()
-                .withCollectionName(collectionName)
-                .withSyncLoad(true)
-                .withSyncLoadWaitingInterval(500L)
-                .withSyncLoadWaitingTimeout(100L)
+        milvusClientV2.loadCollection(LoadCollectionReq.builder()
+                .collectionName(collectionName)
+                .async(false)
                 .build());
         long endLoadTime = System.currentTimeMillis();
         System.out.println("Succeed in " + (endLoadTime - startLoadTime) / 1000.00 + " seconds");
 
         // search
         final Integer SEARCH_K = 2;                       // TopK
-        final String SEARCH_PARAM = "{\"nprobe\":10}";    // Params
+        Map<String, Object> searchLevel = new HashMap<>(); // Params
+        searchLevel.put("level", 1);
         List<String> search_output_fields = Arrays.asList("book_id", "word_count");
         for (int i = 0; i < 10; i++) {
+            List<BaseVector> data = new ArrayList<>();
             List<Float> floatList = new ArrayList<>();
             for (int k = 0; k < dim; ++k) {
                 floatList.add(ran.nextFloat());
             }
+            data.add(new FloatVec(floatList));
             List<List<Float>> search_vectors = Collections.singletonList(floatList);
-            SearchParam searchParam = SearchParam.newBuilder()
-                    .withCollectionName(collectionName)
-                    .withMetricType(MetricType.L2)
-                    .withOutFields(search_output_fields)
-                    .withTopK(SEARCH_K)
-                    .withVectors(search_vectors)
-                    .withVectorFieldName(bookIntroField.getName())
-                    .withParams(SEARCH_PARAM)
-                    .build();
+
             long startSearchTime = System.currentTimeMillis();
-            R<SearchResults> search = milvusClient.search(searchParam);
+            SearchResp search = milvusClientV2.search(SearchReq.builder()
+                    .data(data)
+                    .consistencyLevel(ConsistencyLevel.STRONG)
+                    .collectionName(collectionName)
+                    .searchParams(searchLevel)
+                    .outputFields(search_output_fields)
+                    .metricType(IndexParam.MetricType.L2)
+                    .topK(SEARCH_K)
+                    .build());
             long endSearchTime = System.currentTimeMillis();
             System.out.println("Searching vector: " + search_vectors);
-            System.out.println("Result: " + search.getData().getResults().getFieldsDataList());
+            System.out.println("Result: " + search.getSearchResults());
             System.out.println("search " + i + " latency: " + (endSearchTime - startSearchTime) / 1000.00 + " seconds");
         }
 
-        milvusClient.close();
+        milvusClientV2.close();
     }
 
 }
